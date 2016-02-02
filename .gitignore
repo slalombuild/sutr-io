@@ -1,12 +1,84 @@
-*.class
+out/production/avs-utter/com/slalom/aws/avs/sutr/Sutr.bnf
+out/production/avs-utter/com/slalom/aws/avs/sutr/SutrColorSettingsPage.class
+out/production/avs-utter/com/slalom/aws/avs/sutr/SutrFileTypeFactory.class
+out/production/avs-utter/com/slalom/aws/avs/sutr/SutrIcons.class
+out/production/avs-utter/com/slalom/aws/avs/sutr/SutrLanguage.class
+out/production/avs-utter/com/slalom/aws/avs/sutr/SutrLanguageType.class
+out/production/avs-utter/com/slalom/aws/avs/sutr/SutrLexer.class
+out/production/avs-utter/com/slalom/aws/avs/sutr/SutrLexerAdapter.class
+out/production/avs-utter/com/slalom/aws/avs/sutr/SutrParserDefinition.class
+out/production/avs-utter/com/slalom/aws/avs/sutr/SutrSyntaxHighlighter.class
+out/production/avs-utter/com/slalom/aws/avs/sutr/SutrSyntaxHighlighterFactory.class
+out/production/avs-utter/com/slalom/aws/avs/sutr/icons/sutr-gray.png
+out/production/avs-utter/com/slalom/aws/avs/sutr/parser/SutrParser.class
+out/production/avs-utter/com/slalom/aws/avs/sutr/parser/SutrParserUtil.class
+out/production/avs-utter/com/slalom/aws/avs/sutr/psi/SutrElementType.class
+out/production/avs-utter/com/slalom/aws/avs/sutr/psi/SutrFile.class
+out/production/avs-utter/com/slalom/aws/avs/sutr/psi/SutrIntent.class
+out/production/avs-utter/com/slalom/aws/avs/sutr/psi/SutrIntentName.class
+out/production/avs-utter/com/slalom/aws/avs/sutr/psi/SutrNamedElement.class
+out/production/avs-utter/com/slalom/aws/avs/sutr/psi/SutrSpace.class
+out/production/avs-utter/com/slalom/aws/avs/sutr/psi/SutrSutr.class
+out/production/avs-utter/com/slalom/aws/avs/sutr/psi/SutrTokenType.class
+out/production/avs-utter/com/slalom/aws/avs/sutr/psi/SutrTypes$Factory.class
+out/production/avs-utter/com/slalom/aws/avs/sutr/psi/SutrTypes.class
+out/production/avs-utter/com/slalom/aws/avs/sutr/psi/SutrUtterance.class
+out/production/avs-utter/com/slalom/aws/avs/sutr/psi/SutrVisitor.class
+out/production/avs-utter/com/slalom/aws/avs/sutr/psi/impl/SutrNamedElementImpl.class
+out/production/avs-utter/com/slalom/aws/avs/sutr/psi/impl/SutrSutrImpl.class
+out/test/avs-utter/com/slalom/aws/avs/sutr/SutrLexerTest$TestElement.class
+out/test/avs-utter/com/slalom/aws/avs/sutr/SutrLexerTest.class
+.idea/workspace.xml
+out/
+gen/com/
+.idea/uiDesigner.xml
+.idea/compiler.xml
+.idea/copyright/profiles_settings.xml
+### JetBrains template
+# Covers JetBrains IDEs: IntelliJ, RubyMine, PhpStorm, AppCode, PyCharm, CLion, Android Studio
 
-# Mobile Tools for Java (J2ME)
-.mtj.tmp/
+*.iml
 
-# Package Files #
-*.jar
-*.war
-*.ear
+## Directory-based project format:
+.idea/
+# if you remove the above rule, at least ignore the following:
 
-# virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
-hs_err_pid*
+# User-specific stuff:
+# .idea/workspace.xml
+# .idea/tasks.xml
+# .idea/dictionaries
+
+# Sensitive or high-churn files:
+# .idea/dataSources.ids
+# .idea/dataSources.xml
+# .idea/sqlDataSources.xml
+# .idea/dynamic.xml
+# .idea/uiDesigner.xml
+
+# Gradle:
+# .idea/gradle.xml
+# .idea/libraries
+
+# Mongo Explorer plugin:
+# .idea/mongoSettings.xml
+
+## File-based project format:
+*.ipr
+*.iws
+
+## Plugin-specific files:
+
+# IntelliJ
+/out/
+
+# mpeltonen/sbt-idea plugin
+.idea_modules/
+
+# JIRA plugin
+atlassian-ide-plugin.xml
+
+# Crashlytics plugin (for Android Studio and IntelliJ)
+com_crashlytics_export_strings.xml
+crashlytics.properties
+crashlytics-build.properties
+

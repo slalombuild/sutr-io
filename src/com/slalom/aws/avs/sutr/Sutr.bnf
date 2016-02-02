@@ -1,0 +1,87 @@
+{
+    psiImplUtilClass="com.slalom.aws.avs.sutr.psi.util.SutrPsiImplUtil"
+
+    parserClass="com.slalom.aws.avs.sutr.parser.SutrParser"
+    parserUtilClass="com.slalom.aws.avs.sutr.SutrGeneratedParserUtilBase"
+
+    implements="com.slalom.aws.avs.sutr.parser.SutrPsiCompositeElement"
+    extends="com.slalom.aws.avs.sutr.psi.impl.SutrCompositeElementImpl"
+
+    psiClassPrefix="Sutr"
+    psiImplClassSuffix="Impl"
+    psiPackage="com.slalom.aws.avs.sutr.psi"
+    psiImplPackage="com.slalom.aws.avs.sutr.psi.impl"
+
+    elementTypePrefix="Sutr"
+    elementTypeHolderClass="com.slalom.aws.avs.sutr.psi.SutrTypes"
+    elementTypeClass="com.slalom.aws.avs.sutr.psi.SutrElementType"
+    tokenTypeClass="com.slalom.aws.avs.sutr.psi.SutrTokenType"
+
+    tokens=[
+        DEF='def'
+        LITERAL='literal'
+        TYPE='type'
+        COMMENT='regexp:#[^\r\n]*'
+//        WORD='regexp:\w+'
+//        UTTERANCE_PART='regexp:[\w\ ]+'
+        LB='{'
+        RB='}'
+        LP='('
+        RP=')'
+        LS='['
+        RS=']'
+        COMMA=','
+        FP='=>'
+        IMPORT='import'
+        FROM='from'
+//        SPACE='regexp:\s+'
+    ]
+}
+
+sutrFile ::= item_*
+private item_ ::= (custom_type|literal_type|sutr_object|import_stmt|COMMENT) {recoverWhile="top_level_recover"}
+private top_level_recover ::= !('def' | 'type' | 'literal' | 'from')
+
+import_stmt ::= 'from' file_name IMPORT type_name
+{methods=[getTypeReferences resolveReference]}
+
+file_name ::= NAME
+
+custom_type ::= 'type' type_name custom_type_items
+{extends="com.slalom.aws.avs.sutr.psi.impl.SutrReferenceImpl" implements="com.slalom.aws.avs.sutr.psi.SutrTypeDefinitionReference" }
+
+custom_type_items ::= LS custom_type_item (',' custom_type_item)* RS {pin=1}
+custom_type_item ::= (NAME|WORD)
+
+literal_type ::= 'literal' type_name literal_phrases
+{extends="com.slalom.aws.avs.sutr.psi.impl.SutrReferenceImpl" implements="com.slalom.aws.avs.sutr.psi.SutrTypeDefinitionReference" }
+
+literal_phrases ::= LS literal_phrase (',' literal_phrase )* RS {pin=1}
+literal_phrase ::= (NAME|WORD)*
+
+sutr_object ::= 'def' sutr_name sutr_params sutr_body function_pointer {pin=3}
+
+sutr_params ::= '(' sutr_param (',' sutr_param)* ')' | '(' sutr_param? ')'
+sutr_param ::= type_name param_name {methods=[getParentSutr getDefaultValue]}
+
+sutr_body ::= '{' (utterance|EOL|LINE_WS)* '}'
+utterance ::= ( utterance_part | slot)+ EOL
+utterance_part ::= (NAME | WORD)+
+
+slot ::= '{' (slot_name) '}'
+{pin=1 extends="com.slalom.aws.avs.sutr.psi.impl.SutrSlotReferenceImpl" implements="com.slalom.aws.avs.sutr.psi.SutrSlotReference" methods=[getParentSutr]}
+
+function_pointer ::= '=>' function_name
+function_name ::= (NAME|WORD|FUNCTION_IDENTIFIER)
+
+//We might allow these to be slight different...not sure yet...
+type_name ::= NAME|IDENTIFIER
+{extends="com.slalom.aws.avs.sutr.psi.impl.SutrTypeReferenceImpl" implements="com.slalom.aws.avs.sutr.psi.SutrTypeReference" methods=[getParentSutr]}
+
+sutr_name ::= NAME
+slot_name ::= NAME {methods=[getParentSutr]}
+
+param_name ::= NAME
+{extends="com.slalom.aws.avs.sutr.psi.impl.SutrSlotNamedElementImpl" methods=[getParentSutr]}
+
+

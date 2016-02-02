@@ -1,0 +1,21 @@
+# This is a comment
+
+type MyCustomType = [
+	Jump
+	Run
+	Walk
+	stand
+	#comments can go here
+]
+
+literal MyLiteral = [
+	Jump and run
+	Run
+	Walk and do a thing
+]
+
+action MyAction(MyCustomType Action, MyLiteral Phrase, DATE Date){
+	Remember to do {Action} or {Phrase} on {Date}
+	#comments can go here
+	Remind me to {Action} and {Phrase} on {Date}
+}

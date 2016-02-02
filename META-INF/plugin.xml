@@ -1,0 +1,76 @@
+<idea-plugin version="2">
+  <id>com.slalom.idea.aws.avs.sutr</id>
+  <name>Sutr Language Plugin</name>
+  <version>0.7.3</version>
+  <vendor email="stryderc@slalom.com" url="http://www.slalom.com">Slalom</vendor>
+
+  <description><![CDATA[
+      This plugin provides language support for Sutr, the Slalom implementation of AVS Utterance.<br>
+    ]]></description>
+
+  <change-notes><![CDATA[
+    0.7.3 - Support added for 'from <file> import <typeName>' statements. '_' now valid for Type name declarations.
+    0.7.2 - Implement error annotations for duplicate types. Pop up messages and compilation validation added.<br>
+    0.7.1 - Add generator for Node/python. Copy Custom Type List action added.<br>
+    0.7.0 - Implement error annotations for types, slots, and duplicates. Rename refactoring enabled. Commenter hot key enabled.<br>
+    ]]>
+  </change-notes>
+
+  <!-- please see https://confluence.jetbrains.com/display/IDEADEV/Build+Number+Ranges for description -->
+  <idea-version since-build="131"/>
+
+  <!-- please see https://confluence.jetbrains.com/display/IDEADEV/Plugin+Compatibility+with+IntelliJ+Platform+Products
+       on how to target different products -->
+  <!-- uncomment to enable plugin in all products
+  -->
+  <depends>com.intellij.modules.lang</depends>
+
+  <extensions defaultExtensionNs="com.intellij">
+    <fileTypeFactory implementation="com.slalom.aws.avs.sutr.SutrFileTypeFactory" />
+    <fileTypeFactory implementation="com.slalom.aws.avs.utr.UtrFileTypeFactory" />
+    <lang.parserDefinition language="sutr" implementationClass="com.slalom.aws.avs.sutr.SutrParserDefinition"/>
+    <lang.parserDefinition language="utr" implementationClass="com.slalom.aws.avs.utr.UtrParserDefinition"/>
+    <lang.syntaxHighlighterFactory language="sutr" implementationClass="com.slalom.aws.avs.sutr.SutrSyntaxHighlighterFactory" />
+    <lang.syntaxHighlighterFactory language="utr" implementationClass="com.slalom.aws.avs.utr.UtrSyntaxHighlighterFactory" />
+    <annotator language="sutr" implementationClass="com.slalom.aws.avs.sutr.SutrAnnotator"/>
+    <annotator language="utr" implementationClass="com.slalom.aws.avs.utr.UtrAnnotator"/>
+    <lang.findUsagesProvider language="sutr" implementationClass="com.slalom.aws.avs.sutr.SutrFindUsagesProvider" />
+    <completion.contributor language="sutr" implementationClass="com.slalom.aws.avs.sutr.SutrCompletionContributor" />
+    <lang.commenter language="sutr" implementationClass="com.slalom.aws.avs.sutr.psi.impl.SutrCommenter" />
+    <!--<colorSettingsPage implementation="com.slalom.aws.avs.sutr.SutrColorSettingsPage" />-->
+    <!--<colorSettingsPage implementation="com.slalom.aws.avs.utr.UtrColorSettingsPage" />-->
+  </extensions>
+
+  <application-components>
+    <!-- Add your application components here -->
+
+  </application-components>
+
+  <project-components>
+
+    <!-- Add your project components here -->
+  </project-components>
+
+  <actions>
+    <!-- Add your actions here -->
+    <group id="sutr.action.group" class="com.slalom.aws.avs.sutr.actions.SutrActionGroup" popup="false">
+      <separator />
+      <action id="sutr.action.copy.Intent" class="com.slalom.aws.avs.sutr.actions.CopyIntentJson" text="Copy Intents"  />
+      <action id="sutr.action.copy.Utterances" class="com.slalom.aws.avs.sutr.actions.CopyUtterances" text="Copy Utterances" />
+      <action id="sutr.action.copy.CustomType" class="com.slalom.aws.avs.sutr.actions.CopyCustomType" text="Copy CustomType" />
+
+      <!---->
+
+      <group id="sutr.action.generate.launcher.group" popup="true" text="Generate Launcher" >
+        <action id="sutr.action.generate.NodeLauncher" class="com.slalom.aws.avs.sutr.actions.GenerateNodeLauncher" text="Copy Node Launcher" />
+        <action id="sutr.action.generate.PythonLauncher" class="com.slalom.aws.avs.sutr.actions.GeneratePythonLauncher" text="Copy Python Launcher" />
+      </group>
+
+      <add-to-group group-id="EditorPopupMenu" anchor="last" />
+      <add-to-group group-id="ProjectViewPopupMenu" anchor="last" />
+
+    </group>
+
+  </actions>
+
+</idea-plugin>

@@ -1,0 +1,28 @@
+{
+    parserClass="com.slalom.aws.avs.utr.parser.UtrParser"
+    parserUtilClass="com.slalom.aws.avs.utr.UtrGeneratedParserUtilBase"
+
+    implements="com.slalom.aws.avs.utr.parser.UtrPsiCompositeElement"
+    extends="com.slalom.aws.avs.utr.psi.impl.UtrCompositeElementImpl"
+
+    psiClassPrefix="Utr"
+    psiImplClassSuffix="Impl"
+    psiPackage="com.slalom.aws.avs.utr.psi"
+    psiImplPackage="com.slalom.aws.avs.utr.psi.impl"
+
+    elementTypePrefix="Utr"
+    elementTypeHolderClass="com.slalom.aws.avs.utr.psi.UtrTypes"
+    elementTypeClass="com.slalom.aws.avs.utr.psi.UtrElementType"
+    tokenTypeClass="com.slalom.aws.avs.utr.psi.UtrTokenType"
+
+    tokens=[
+        PIPE='|'
+    ]
+}
+
+utteranceFile ::= utterances*
+utterances ::= intent utterance {pin=1}
+utterance ::= (WORD|slot)* EOL
+slot ::= LB (phrase '|')? slot_name RB {pin=1}
+slot_name ::= WORD
+phrase ::= (WORD+)
