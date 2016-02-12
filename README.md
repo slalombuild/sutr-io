@@ -100,16 +100,6 @@ and the following Intent.json:
             }
         ]
     }
- 
- 
-### Coming Soon (in no particular order)
-* Generate Item List from Type
-* Rename Refactorings
-* Find Usages
-* Code completion
-* Generate Launcher
-* Output as files
-* Introduce Slot
-* Reference external types
+
 
     
