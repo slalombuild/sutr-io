@@ -20,7 +20,6 @@ public class SutrConfig implements Configurable{
     private TextFieldWithBrowseButton handlerOutputLocation;
     private TextFieldWithBrowseButton intentOutputLocation;
     private TextFieldWithBrowseButton utterancesOutputLocation;
-    private boolean _isModified;
 
     @Nullable
     @Override
@@ -32,8 +31,6 @@ public class SutrConfig implements Configurable{
         handlerTemplateLocation.setText(state.handlerTemplateLocation);
         intentOutputLocation.setText(state.intentOutputLocation);
         utterancesOutputLocation.setText(state.utterancesOutputLocation);
-
-        _isModified = false;
 
         return myPanel;
     }
@@ -52,7 +49,12 @@ public class SutrConfig implements Configurable{
 
     @Override
     public boolean isModified() {
-        return true;
+        SutrOutputState state = new SutrOutputState();
+
+        return (! handlerOutputLocation.getText().equals(state.handlerOutputLocation)
+                || !handlerTemplateLocation.getText().equals(state.handlerTemplateLocation)
+                || !intentOutputLocation.getText().equals(state.intentOutputLocation)
+                || ! utterancesOutputLocation.getText().equals(state.utterancesOutputLocation));
     }
 
     @Override
@@ -65,10 +67,7 @@ public class SutrConfig implements Configurable{
         String _utterancesOutputLocation = utterancesOutputLocation.getText();
         String _intentOutputLocation = intentOutputLocation.getText();
 
-        if (!_handlerOutputLocation.equals(state.handlerOutputLocation)
-            || !_handlerTemplateLocation.equals(state.handlerTemplateLocation)
-            || !_intentOutputLocation.equals(state.intentOutputLocation)
-            || ! _utterancesOutputLocation.equals(state.utterancesOutputLocation)){
+        if (isModified()){
 
             state.handlerOutputLocation = _handlerOutputLocation;
             state.handlerTemplateLocation = _handlerTemplateLocation;
