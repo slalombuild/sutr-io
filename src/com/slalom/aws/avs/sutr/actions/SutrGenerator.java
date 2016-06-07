@@ -16,9 +16,9 @@ import java.util.*;
 /**
  * Created by stryderc on 1/8/2016.
  */
-public class SutrGenerator {
+class SutrGenerator {
 
-    public static StringBuilder buildIntent(List<SutrFile> sutrFiles) throws SutrGeneratorException {
+    static StringBuilder buildIntent(List<SutrFile> sutrFiles) throws SutrGeneratorException {
         Intents intents = new Intents();
         List<Intent> intentCollection = new ArrayList<Intent>();
 
@@ -64,7 +64,7 @@ public class SutrGenerator {
     }
 
     @NotNull
-    public static StringBuilder buildUtterances(List<SutrFile> sutrFiles) throws SutrGeneratorException {
+    static StringBuilder buildUtterances(List<SutrFile> sutrFiles) throws SutrGeneratorException {
 
 
         BuildSutrDefinitions sutrDefinitions = new BuildSutrDefinitions(sutrFiles).invoke();
@@ -116,7 +116,7 @@ public class SutrGenerator {
         return literalsMap;
     }
 
-    public static StringBuilder buildNodeLauncher(List<SutrFile> sutrFiles) throws SutrGeneratorException {
+    static StringBuilder buildNodeLauncher(List<SutrFile> sutrFiles) throws SutrGeneratorException {
 
         String premable =
                 "function onIntent(intentRequest, session, callback) {\n" +
@@ -176,7 +176,7 @@ public class SutrGenerator {
         return sutrObjects;
     }
 
-    public static StringBuilder buildPythonLauncher(List<SutrFile> sutrFiles) throws SutrGeneratorException {
+    static StringBuilder buildPythonLauncher(List<SutrFile> sutrFiles) throws SutrGeneratorException {
 
         StringBuilder builder = new StringBuilder(PythonText.GeneratorPreamble);
 
@@ -237,7 +237,7 @@ public class SutrGenerator {
         return builder.append("\n");
     }
 
-    public static StringBuilder buildCustomTypeItems(final SutrCustomType customType) throws SutrGeneratorException {
+    static StringBuilder buildCustomTypeItems(final SutrCustomType customType) throws SutrGeneratorException {
         StringBuilder customTypeItemListBuilder = new StringBuilder();
 
         final List<SutrCustomTypeItem> customTypeItemList = customType.getCustomTypeItems().getCustomTypeItemList();
@@ -252,17 +252,21 @@ public class SutrGenerator {
         return customTypeItemListBuilder;
     }
 
+    static StringBuilder buildHandler(List<SutrFile> sutrFiles, String template) {
+        return null;
+    }
+
     private static class BuildSutrDefinitions {
         private final List<SutrFile> sutrFiles;
         private List<SutrObject> sutrObjectList;
         private Map<String, SutrCustomType> sutrCustomTypeKeys;
         private Map<String, SutrLiteralType> sutrLiteralTypeKeys;
 
-        public BuildSutrDefinitions(final List<SutrFile> sutrFiles) {
+        BuildSutrDefinitions(final List<SutrFile> sutrFiles) {
             this.sutrFiles = sutrFiles;
         }
 
-        public List<SutrObject> getSutrObjectList() {
+        List<SutrObject> getSutrObjectList() {
             return sutrObjectList;
         }
 
@@ -270,11 +274,11 @@ public class SutrGenerator {
             return sutrCustomTypeKeys;
         }
 
-        public Map<String, SutrLiteralType> getSutrLiteralTypeKeys() {
+        Map<String, SutrLiteralType> getSutrLiteralTypeKeys() {
             return sutrLiteralTypeKeys;
         }
 
-        public BuildSutrDefinitions invoke() throws SutrGeneratorException {
+        BuildSutrDefinitions invoke() throws SutrGeneratorException {
             sutrObjectList = new ArrayList<>();
             sutrCustomTypeKeys = new HashMap<>();
             sutrLiteralTypeKeys = new HashMap<>();
