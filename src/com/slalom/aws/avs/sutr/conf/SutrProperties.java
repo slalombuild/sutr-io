@@ -4,6 +4,8 @@ import com.intellij.ide.util.PropertyName;
 
 /**
  * Created by stryderc on 6/7/2016.
+ *
+ * Properties that are used by the Sutr.io plugin.
  */
 class SutrProperties {
 

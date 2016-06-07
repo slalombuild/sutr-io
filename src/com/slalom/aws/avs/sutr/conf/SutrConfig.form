@@ -77,7 +77,8 @@
         </constraints>
         <properties>
           <actionCommand value="Use Custom Output Paths"/>
-          <text value="Use Custom Output Paths"/>
+          <label value="Use &amp;Custom Output Paths"/>
+          <text value="Use &amp;Custom Output Paths"/>
         </properties>
       </component>
       <component id="574ae" class="javax.swing.JLabel">

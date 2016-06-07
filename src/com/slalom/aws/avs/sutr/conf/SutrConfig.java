@@ -14,11 +14,11 @@ import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 /**
  * Created by stryderc on 6/7/2016.
+ *
+ * Config manager for the Sutr.io plugin.
  */
 
 public class SutrConfig implements Configurable{
@@ -63,12 +63,9 @@ public class SutrConfig implements Configurable{
         intentOutputLocationBrowseButton.addBrowseFolderListener("Intent Output File", "Select file", project, fileDescriptor);
         utterancesOutputLocationBrowseButton.addBrowseFolderListener("Utterances Location", "Select a directory where the utterances file will be saved.", project, fileDescriptor);
 
-        useCustomOutputPathsCheckBox.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                boolean isSelected = ((JCheckBox) e.getSource()).isSelected();
-                EnableCustomPaths(isSelected);
-            }
+        useCustomOutputPathsCheckBox.addActionListener(e -> {
+            boolean isSelected = ((JCheckBox) e.getSource()).isSelected();
+            EnableCustomPaths(isSelected);
         });
 
         EnableCustomPaths(useCustomOutputPathsCheckBox.isSelected());
@@ -148,7 +145,7 @@ public class SutrConfig implements Configurable{
     }
 
     public Project getProject() {
-        DataContext dataContext = DataManager.getInstance().getDataContext();  // Deprecated in favor of?? --stryderc 6/7/2016
+        DataContext dataContext = DataManager.getInstance().getDataContext(myPanel);
 
         return (Project) dataContext.getData(CommonDataKeys.PROJECT.getName());
     }
