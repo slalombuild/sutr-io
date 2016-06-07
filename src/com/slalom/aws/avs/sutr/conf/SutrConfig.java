@@ -6,6 +6,8 @@ import com.intellij.openapi.ui.TextFieldWithBrowseButton;
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.Nullable;
 
+import javax.swing.*;
+
 /**
  * Created by stryderc on 6/7/2016.
  */
@@ -50,7 +52,7 @@ public class SutrConfig implements Configurable{
 
     @Override
     public boolean isModified() {
-        return _isModified;
+        return true;
     }
 
     @Override

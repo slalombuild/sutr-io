@@ -28,13 +28,13 @@ public class SutrGenerator {
             throw new SutrGeneratorException("No Sutr definitions found");
         }
 
-        for (final SutrSutrObject sutrDef : sutrDefinitions.getSutrObjectList()) {
+        for (final SutrObject sutrDef : sutrDefinitions.getSutrObjectList()) {
 
             String intent_name = sutrDef.getSutrName().getText();
 
             List<Slot> slots = new ArrayList<Slot>();
 
-            for (SutrSutrParam param : sutrDef.getSutrParams().getSutrParamList()) {
+            for (SutrParam param : sutrDef.getSutrParams().getSutrParamList()) {
                 String typeName = param.getTypeName().getText();
                 String paramName = param.getParamName().getText();
 
@@ -76,11 +76,11 @@ public class SutrGenerator {
         List<Utterance> utterances = new ArrayList<>();
         final LiteralMapper literalsMap = new LiteralMapper(sutrDefinitions.getSutrLiteralTypeKeys());
 
-        for (final SutrSutrObject sutrObject : sutrDefinitions.getSutrObjectList()) {
+        for (final SutrObject sutrObject : sutrDefinitions.getSutrObjectList()) {
 
             String utteranceName = sutrObject.getSutrName().getText();
 
-            final SutrSutrBody sutrBody = sutrObject.getSutrBody();
+            final SutrBody sutrBody = sutrObject.getSutrBody();
 
             if (sutrBody != null) {
                 for (SutrUtterance utterance : sutrBody.getUtteranceList()) {
@@ -128,11 +128,11 @@ public class SutrGenerator {
                         "\n";
 
         StringBuilder builder = new StringBuilder(premable);
-        List<SutrSutrObject> sutrCollection = getSutrObjects(sutrFiles);
+        List<SutrObject> sutrCollection = getSutrObjects(sutrFiles);
 
         int count = 0;
 
-        for (SutrSutrObject sutr : sutrCollection) {
+        for (SutrObject sutr : sutrCollection) {
             if (count > 0) {
                 builder.append(" else ");
             } else {
@@ -165,11 +165,11 @@ public class SutrGenerator {
         return builder;
     }
 
-    private static List<SutrSutrObject> getSutrObjects(List<SutrFile> sutrFiles) {
-        List<SutrSutrObject> sutrObjects = new ArrayList<>();
+    private static List<SutrObject> getSutrObjects(List<SutrFile> sutrFiles) {
+        List<SutrObject> sutrObjects = new ArrayList<>();
 
         for (SutrFile file : sutrFiles) {
-            final SutrSutrObject[] sutrDefinitions = file.findChildrenByClass(SutrSutrObject.class);
+            final SutrObject[] sutrDefinitions = file.findChildrenByClass(SutrObject.class);
             Collections.addAll(sutrObjects, sutrDefinitions);
         }
 
@@ -180,12 +180,12 @@ public class SutrGenerator {
 
         StringBuilder builder = new StringBuilder(PythonText.GeneratorPreamble);
 
-        List<SutrSutrObject> sutrCollection = getSutrObjects(sutrFiles);
+        List<SutrObject> sutrCollection = getSutrObjects(sutrFiles);
 
         builder.append("\n").append(PythonText.OnIntentPreamble);
         int count = 0;
 
-        for (SutrSutrObject sutr : sutrCollection) {
+        for (SutrObject sutr : sutrCollection) {
             final SutrFunctionPointer functionPointer = sutr.getFunctionPointer();
 
             if (functionPointer == null) {
@@ -206,7 +206,7 @@ public class SutrGenerator {
             StringBuilder paramBuilder = new StringBuilder("intent, session");
             StringBuilder defaultParamValueBuilder = new StringBuilder();
 
-            for (final SutrSutrParam sutrSutrParam : sutr.getSutrParams().getSutrParamList()) {
+            for (final SutrParam sutrSutrParam : sutr.getSutrParams().getSutrParamList()) {
                 final String paramName = sutrSutrParam.getParamName().getText();
 
                 final String defaultValue = sutrSutrParam.getDefaultValue();
@@ -254,7 +254,7 @@ public class SutrGenerator {
 
     private static class BuildSutrDefinitions {
         private final List<SutrFile> sutrFiles;
-        private List<SutrSutrObject> sutrObjectList;
+        private List<SutrObject> sutrObjectList;
         private Map<String, SutrCustomType> sutrCustomTypeKeys;
         private Map<String, SutrLiteralType> sutrLiteralTypeKeys;
 
@@ -262,7 +262,7 @@ public class SutrGenerator {
             this.sutrFiles = sutrFiles;
         }
 
-        public List<SutrSutrObject> getSutrObjectList() {
+        public List<SutrObject> getSutrObjectList() {
             return sutrObjectList;
         }
 
@@ -278,11 +278,11 @@ public class SutrGenerator {
             sutrObjectList = new ArrayList<>();
             sutrCustomTypeKeys = new HashMap<>();
             sutrLiteralTypeKeys = new HashMap<>();
-            Map<String, SutrSutrObject> tempSutr = new HashMap<>();
+            Map<String, SutrObject> tempSutr = new HashMap<>();
 
             for (SutrFile file : sutrFiles) {
 
-                final SutrSutrObject[] sutrObjects = file.findChildrenByClass(SutrSutrObject.class);
+                final SutrObject[] sutrObjects = file.findChildrenByClass(SutrObject.class);
                 //We need to look at any import statements and pull declared types in from that file.
                 SutrImportStmt[] importStmts = file.findChildrenByClass(SutrImportStmt.class);
                 for (SutrImportStmt importStmt : importStmts) {
@@ -298,7 +298,7 @@ public class SutrGenerator {
                     }
                 }
 
-                for (final SutrSutrObject sutrObject : sutrObjects) {
+                for (final SutrObject sutrObject : sutrObjects) {
 
                     final String sutrName = sutrObject.getSutrName().getText();
 

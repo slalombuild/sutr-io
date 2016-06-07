@@ -14,7 +14,7 @@ public class SutrCompiler {
 //        StringBuilder builder = new StringBuilder();
 //
 //        for(SutrSutrDefImpl item : file.findChildrenByClass(SutrSutrDefImpl.class)){
-//            final List<SutrSutrParam> params = item.getSutrParamList();
+//            final List<SutrParam> params = item.getSutrParamList();
 //            System.out.println(item.toString());
 //
 //        }

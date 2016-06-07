@@ -27,8 +27,8 @@ public class LiteralMapper {
 
     }
 
-    public List<String> Map(SutrUtterance utterance, SutrSutrObject sutrObject) {
-        final List<SutrSutrParam> sutrParamList = sutrObject.getSutrParams().getSutrParamList();
+    public List<String> Map(SutrUtterance utterance, SutrObject sutrObject) {
+        final List<SutrParam> sutrParamList = sutrObject.getSutrParams().getSutrParamList();
 
         List<String> utteranceVariations = new ArrayList<>();
 
@@ -51,13 +51,13 @@ public class LiteralMapper {
     }
 
     @NotNull
-    private SlotDTO[] buildKeySet(SutrUtterance utterance, List<SutrSutrParam> sutrParamList) {
+    private SlotDTO[] buildKeySet(SutrUtterance utterance, List<SutrParam> sutrParamList) {
         List<SlotDTO> keySet = new ArrayList<>();
 
         List<SutrSlot> slots = utterance.getSlotList();
 
         for (SutrSlot slot : slots) {
-            for (SutrSutrParam sutrSutrParam : sutrParamList) {
+            for (SutrParam sutrSutrParam : sutrParamList) {
                 if(slot.getSlotName().getText().equals(sutrSutrParam.getParamName().getText())){
                     if(_literalsMap.containsKey(sutrSutrParam.getTypeName().getText())){
                         keySet.add(new SlotDTO(sutrSutrParam.getTypeName().getText(), slot.getText(), slot.getSlotName().getText()));

@@ -12,7 +12,7 @@ import com.slalom.aws.avs.sutr.psi.*;
  */
 public class SutrPsiImplUtil {
 
-    public static PsiElement getNameIdentifier(SutrSutrParam element) {
+    public static PsiElement getNameIdentifier(SutrParam element) {
         ASTNode keyNode = element.getNode().findChildByType(SutrTypes.SutrPARAM_NAME);
         if (keyNode != null) {
             return keyNode.getPsi();
@@ -56,27 +56,27 @@ public class SutrPsiImplUtil {
     }
 
 
-    public static SutrSutrObject getParentSutr(SutrParamName paramName) {
-        return (SutrSutrObject)paramName.getParent().getParent().getParent();
+    public static SutrObject getParentSutr(SutrParamName paramName) {
+        return (SutrObject)paramName.getParent().getParent().getParent();
     }
 
-    public static SutrSutrObject getParentSutr(SutrSlotName slotName) {
-        return (SutrSutrObject)slotName.getParent().getParent().getParent();
+    public static SutrObject getParentSutr(SutrSlotName slotName) {
+        return (SutrObject)slotName.getParent().getParent().getParent();
     }
 
-    public static SutrSutrObject getParentSutr(SutrSutrParam slotName) {
-        return (SutrSutrObject)slotName.getParent().getParent().getParent();
+    public static SutrObject getParentSutr(SutrParam slotName) {
+        return (SutrObject)slotName.getParent().getParent().getParent();
     }
 
-    public static SutrSutrObject getParentSutr(SutrTypeName slotName) {
-        return (SutrSutrObject)slotName.getParent().getParent().getParent();
+    public static SutrObject getParentSutr(SutrTypeName slotName) {
+        return (SutrObject)slotName.getParent().getParent().getParent();
     }
 
-    public static SutrSutrObject getParentSutr(SutrSlot slot) {
-        return (SutrSutrObject)slot.getParent().getParent().getParent();
+    public static SutrObject getParentSutr(SutrSlot slot) {
+        return (SutrObject)slot.getParent().getParent().getParent();
     }
 
-    public static String getDefaultValue(SutrSutrParam param){
+    public static String getDefaultValue(SutrParam param){
         return "";
     }
 }

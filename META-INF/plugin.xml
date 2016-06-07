@@ -1,7 +1,7 @@
 <idea-plugin version="2">
   <id>com.slalom.idea.aws.avs.sutr</id>
   <name>Sutr Language Plugin</name>
-  <version>0.7.3</version>
+  <version>0.7.4</version>
   <vendor email="stryderc@slalom.com" url="http://www.slalom.com">Slalom</vendor>
 
   <description><![CDATA[
@@ -9,6 +9,7 @@
     ]]></description>
 
   <change-notes><![CDATA[
+    0.7.4 - Settings panel added. Can now configure output paths.
     0.7.3 - Support added for 'from <file> import <typeName>' statements. '_' now valid for Type name declarations.
     0.7.2 - Implement error annotations for duplicate types. Pop up messages and compilation validation added.<br>
     0.7.1 - Add generator for Node/python. Copy Custom Type List action added.<br>

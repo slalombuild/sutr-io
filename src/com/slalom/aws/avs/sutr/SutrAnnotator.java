@@ -73,8 +73,8 @@ public class SutrAnnotator implements Annotator {
     }
 
     private void validateSutrPhrase(final @NotNull PsiElement psiElement, final @NotNull AnnotationHolder annotationHolder) {
-        final SutrSutrObject[] sutrObjects = ((SutrFile) psiElement.getContainingFile()).findChildrenByClass(SutrSutrObject.class);
-        for (final SutrSutrObject sutrObject : sutrObjects) {
+        final SutrObject[] sutrObjects = ((SutrFile) psiElement.getContainingFile()).findChildrenByClass(SutrObject.class);
+        for (final SutrObject sutrObject : sutrObjects) {
             if (sutrObject.getSutrName().getText().equals(psiElement.getText()) && !sutrObject.getSutrName().getNode().equals(psiElement.getParent().getNode())) {
                 annotationHolder.createErrorAnnotation(psiElement, "Duplicate Sutr found");
             }
@@ -129,9 +129,9 @@ public class SutrAnnotator implements Annotator {
     }
 
     private boolean hasParam(final @NotNull PsiElement psiElement) {
-        final SutrSutrObject parent = ((SutrSlotImpl) psiElement.getParent()).getParentSutr();
+        final SutrObject parent = ((SutrSlotImpl) psiElement.getParent()).getParentSutr();
 
-        for (final SutrSutrParam sutrSutrParam : parent.getSutrParams().getSutrParamList()) {
+        for (final SutrParam sutrSutrParam : parent.getSutrParams().getSutrParamList()) {
             if (((SutrSlotImpl) psiElement.getParent()).isReferenceTo(sutrSutrParam.getParamName())) {
                 return true;
             }

@@ -25,7 +25,7 @@ import java.util.*;
  */
 public class ActionUtil {
 
-    protected static String EvaluateType(final SutrSutrParam param) {
+    protected static String EvaluateType(final SutrParam param) {
         String paramType = param.getTypeName().getText();
         final String lowerCaseType = paramType.toLowerCase();
 

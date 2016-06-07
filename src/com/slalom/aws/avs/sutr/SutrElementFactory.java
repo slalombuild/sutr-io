@@ -5,9 +5,9 @@ import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiFileFactory;
 import com.intellij.psi.impl.PsiFileFactoryImpl;
 import com.intellij.testFramework.LightVirtualFile;
+import com.slalom.aws.avs.sutr.psi.SutrBody;
+import com.slalom.aws.avs.sutr.psi.SutrObject;
 import com.slalom.aws.avs.sutr.psi.SutrParamName;
-import com.slalom.aws.avs.sutr.psi.SutrSutrBody;
-import com.slalom.aws.avs.sutr.psi.SutrSutrObject;
 import com.slalom.aws.avs.sutr.psi.SutrUtterance;
 import com.slalom.aws.avs.sutr.psi.impl.SutrCustomTypeImpl;
 import com.slalom.aws.avs.sutr.psi.impl.SutrSlotImpl;
@@ -39,7 +39,7 @@ public class SutrElementFactory {
         final String text = "def Foo(){\n {"+s+"}\n} => foo.func";
         final PsiFile dummyFile = createDummyFile(project, text);
 
-        final SutrSutrBody sutrBody = ((SutrSutrObject) dummyFile.getFirstChild()).getSutrBody();
+        final SutrBody sutrBody = ((SutrObject) dummyFile.getFirstChild()).getSutrBody();
         final List<SutrUtterance> utteranceList = sutrBody.getUtteranceList();
 
         return (SutrSlotImpl) utteranceList.get(0).getSlotList().get(0);
@@ -48,7 +48,7 @@ public class SutrElementFactory {
     public static SutrParamName createParamNameElement(final Project project, final String name) {
         final String text = "def Foo(number "+name+"){\n { foo foo }\n} => foo.func";
         final PsiFile dummyFile = createDummyFile(project, text);
-        final SutrSutrObject sutrObject = ((SutrSutrObject) dummyFile.getFirstChild());
+        final SutrObject sutrObject = ((SutrObject) dummyFile.getFirstChild());
 
         return sutrObject.getSutrParams().getSutrParamList().get(0).getParamName();
     }
