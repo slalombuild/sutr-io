@@ -26,6 +26,7 @@
   <depends>com.intellij.modules.lang</depends>
 
   <extensions defaultExtensionNs="com.intellij">
+    <applicationConfigurable instance="com.slalom.aws.avs.sutr.conf.SutrConfig"/>
     <fileTypeFactory implementation="com.slalom.aws.avs.sutr.SutrFileTypeFactory" />
     <fileTypeFactory implementation="com.slalom.aws.avs.utr.UtrFileTypeFactory" />
     <lang.parserDefinition language="sutr" implementationClass="com.slalom.aws.avs.sutr.SutrParserDefinition"/>
