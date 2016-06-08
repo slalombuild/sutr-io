@@ -11,7 +11,6 @@ import com.slalom.aws.avs.sutr.psi.SutrFile;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 
@@ -67,20 +66,34 @@ public class GenerateVoiceModel extends SutrAction {
         }
     }
 
-    private void WriteContentToFile(StringBuilder fileContent, String filePath) {
-        Path path = Paths.get(filePath);
-        Path fileName = path.getFileName();
-        Path dirs = path.getParent();
+    private void WriteContentToFile(StringBuilder fileContent, String filePath) throws SutrGeneratorException {
+
+
 
         File file = new File(filePath);
 
         try {
+            File dir = Paths.get(filePath).getParent().toFile();
 
-            if(file.exists()|| file.createNewFile()){
+            boolean dirExists = dir.isDirectory();
+            if(!dirExists){
+               dirExists =  dir.mkdirs();
+            }
+
+            if(!dirExists){
+                throw new SutrGeneratorException("Unable to create directory [" + dir.toString() + "]");
+            }
+
+            if((file.exists()|| file.createNewFile())){
                 FileWriter writer = new FileWriter(file);
                 writer.write(fileContent.toString());
                 writer.close();
             }
+            else{
+                throw new SutrGeneratorException("Unable to create file [" + file.toPath().toString() + "]");
+            }
+
+
         } catch (IOException e1) {
             e1.printStackTrace();
         }
