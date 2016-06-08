@@ -59,7 +59,7 @@ public class GenerateVoiceModel extends SutrAction {
             WriteContentToFile(buildIntent, intentPath);
             WriteContentToFile(buildUtterances, utterancesPath);
 
-
+            ActionUtil.ShowInfoMessage("ASK model generated.", e);
 
         } catch (SutrGeneratorException e1) {
             ActionUtil.ShowErrorMessage(e1.getMessage(), e);
@@ -67,8 +67,6 @@ public class GenerateVoiceModel extends SutrAction {
     }
 
     private void WriteContentToFile(StringBuilder fileContent, String filePath) throws SutrGeneratorException {
-
-
 
         File file = new File(filePath);
 
