@@ -20,7 +20,7 @@
           <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
         </constraints>
         <properties>
-          <text value="Handler Template File"/>
+          <text value="Handler Language"/>
         </properties>
       </component>
       <component id="defdb" class="javax.swing.JLabel" binding="handlerOutputFileLabel">
@@ -30,12 +30,6 @@
         <properties>
           <text value="Handler Output File"/>
         </properties>
-      </component>
-      <component id="4c3d1" class="com.intellij.openapi.ui.TextFieldWithBrowseButton" binding="handlerTemplateLocationBrowseButton">
-        <constraints>
-          <grid row="1" column="1" row-span="1" col-span="1" vsize-policy="3" hsize-policy="7" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
-        </constraints>
-        <properties/>
       </component>
       <component id="19f6a" class="javax.swing.JLabel" binding="utterancesOutputFileLabel">
         <constraints>
@@ -86,7 +80,18 @@
           <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
         </constraints>
         <properties>
-          <text value="Label"/>
+          <text value=""/>
+        </properties>
+      </component>
+      <component id="c223a" class="javax.swing.JComboBox" binding="handlerLanguageComboBox">
+        <constraints>
+          <grid row="1" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="2" anchor="8" fill="1" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties>
+          <model>
+            <item value="Python"/>
+            <item value="Javascript"/>
+          </model>
         </properties>
       </component>
     </children>

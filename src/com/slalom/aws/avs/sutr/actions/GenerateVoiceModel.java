@@ -33,7 +33,7 @@ public class GenerateVoiceModel extends SutrAction {
 
             final StringBuilder buildIntent = SutrGenerator.buildIntent(sutrFiles);
             final StringBuilder buildUtterances = SutrGenerator.buildUtterances(sutrFiles);
-            final StringBuilder buildHandler = SutrGenerator.buildHandler(sutrFiles, sutrConfig.handlerTemplateLocation);
+            final StringBuilder buildHandler = SutrGenerator.buildHandler(sutrFiles, sutrConfig.handlerLanguage);
 
             String handlerPath;
             String intentPath;
@@ -51,6 +51,14 @@ public class GenerateVoiceModel extends SutrAction {
                 }
 
                 handlerPath = sutrConfig.defaultHandlerOutputLocation.replace("$PROJECT_ROOT$", basePath);
+
+                if(sutrConfig.handlerLanguage.equals("Javascript")){
+                    handlerPath += "handler.js";
+                }
+                else{
+                    handlerPath += "handler.py";
+                }
+
                 intentPath = sutrConfig.intentOutputLocation.replace("$PROJECT_ROOT$", basePath);
                 utterancesPath = sutrConfig.utterancesOutputLocation.replace("$PROJECT_ROOT$", basePath);
             }

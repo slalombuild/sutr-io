@@ -27,4 +27,7 @@ public class SutrConfig {
     @PropertyName(value="sutr.useCustomPaths", defaultValue = "false")
     public boolean useCustomPaths;
 
+    @PropertyName(value="sutr.handlerLanguage")
+    public String handlerLanguage;
+
 }

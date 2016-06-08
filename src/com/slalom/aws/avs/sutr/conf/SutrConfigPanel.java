@@ -36,6 +36,7 @@ public class SutrConfigPanel implements Configurable {
     private JLabel utterancesOutputFileLabel;
     private JLabel intentOutputFileLabel;
     private JLabel sutrErrorLabel;
+    private JComboBox handlerLanguageComboBox;
 
     private SutrConfig _properties;
 
@@ -45,9 +46,16 @@ public class SutrConfigPanel implements Configurable {
 
         _properties = SutrPluginUtil.getConfig();
 
-        handlerTemplateLocationBrowseButton.setText(_properties.handlerTemplateLocation);
+//        handlerTemplateLocationBrowseButton.setText(_properties.handlerTemplateLocation);
+        handlerLanguageComboBox.addActionListener(e -> {
+
+            String handlerLanguage = ((JComboBox) e.getSource()).getSelectedItem().toString();
+            UpdateHandlerPath(handlerLanguage);
+        });
 
         useCustomOutputPathsCheckBox.setSelected(_properties.useCustomPaths);
+        handlerLanguageComboBox.setSelectedItem(_properties.handlerLanguage);
+
         useCustomOutputPathsCheckBox.addActionListener(e -> {
             boolean isSelected = ((JCheckBox) e.getSource()).isSelected();
             EnableCustomPaths(isSelected);
@@ -63,7 +71,7 @@ public class SutrConfigPanel implements Configurable {
     private void AddBrowserHandlers(Project project) {
         FileChooserDescriptor fileDescriptor = FileChooserDescriptorFactory.createSingleFileDescriptor();
 
-        handlerTemplateLocationBrowseButton.addBrowseFolderListener("Handler Template File", "Select handler template file", project, fileDescriptor);
+//        handlerTemplateLocationBrowseButton.addBrowseFolderListener("Handler Template File", "Select handler template file", project, fileDescriptor);
 
         AddFileSelectorHandler(handlerOutputLocationBrowseButton, project, "Handler Output File", "Provide the path and file name where handler output should be saved.");
         AddFileSelectorHandler(intentOutputLocationBrowseButton, project, "Intent Output File", "Provide the path and file name where the intent.json should be saved.");
@@ -113,10 +121,22 @@ public class SutrConfigPanel implements Configurable {
             utterancesOutputLocationBrowseButton.setText(_properties.utterancesOutputLocation);
         }
         else{
-            handlerOutputLocationBrowseButton.setText(_properties.defaultHandlerOutputLocation);
+            UpdateHandlerPath(_properties.handlerLanguage);
             intentOutputLocationBrowseButton.setText(_properties.defaultIntentOutputLocation);
             utterancesOutputLocationBrowseButton.setText(_properties.defaultUtterancesOutputLocation);
         }
+    }
+
+    private void UpdateHandlerPath(String handlerLanguage) {
+        String handlerPath = _properties.defaultHandlerOutputLocation;
+        if(handlerLanguage.equals("Javascript")){
+            handlerPath += "handler.js";
+        }
+        else{
+            handlerPath += "handler.py";
+        }
+
+        handlerOutputLocationBrowseButton.setText(handlerPath);
     }
 
     @Nls
@@ -138,31 +158,31 @@ public class SutrConfigPanel implements Configurable {
 
     @Override
     public void apply() throws ConfigurationException {
-        String _handlerTemplateLocation = handlerTemplateLocationBrowseButton.getText();
+//        String _handlerTemplateLocation = handlerTemplateLocationBrowseButton.getText();
         String _handlerOutputLocation = handlerOutputLocationBrowseButton.getText();
         String _utterancesOutputLocation = utterancesOutputLocationBrowseButton.getText();
         String _intentOutputLocation = intentOutputLocationBrowseButton.getText();
-
+        String _handlerLanguage = (String) handlerLanguageComboBox.getSelectedItem();
         Boolean _useDefaultPaths = useCustomOutputPathsCheckBox.isSelected();
 
         if (!_handlerOutputLocation.equals(_properties.handlerOutputLocation)
-                || !_handlerTemplateLocation.equals(_properties.handlerTemplateLocation)
+//                || !_handlerTemplateLocation.equals(_properties.handlerTemplateLocation)
                 || !_intentOutputLocation.equals(_properties.intentOutputLocation)
                 || !_utterancesOutputLocation.equals(_properties.utterancesOutputLocation)
+                || !_handlerLanguage.equals(_properties.handlerLanguage)
                 || _useDefaultPaths != _properties.useCustomPaths
                 ) {
 
-            _properties.handlerTemplateLocation = _handlerTemplateLocation;
+//            _properties.handlerTemplateLocation = _handlerTemplateLocation;
             _properties.handlerOutputLocation = _handlerOutputLocation;
             _properties.utterancesOutputLocation = _utterancesOutputLocation;
             _properties.intentOutputLocation = _intentOutputLocation;
+            _properties.handlerLanguage = _handlerLanguage;
             _properties.useCustomPaths = _useDefaultPaths;
 
             SutrPluginUtil.saveConfig(_properties);
         }
     }
-
-
 
     @Override
     public void reset() {

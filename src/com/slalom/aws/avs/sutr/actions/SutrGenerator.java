@@ -252,7 +252,10 @@ class SutrGenerator {
         return customTypeItemListBuilder;
     }
 
-    static StringBuilder buildHandler(List<SutrFile> sutrFiles, String template) throws SutrGeneratorException {
+    static StringBuilder buildHandler(List<SutrFile> sutrFiles, String language) throws SutrGeneratorException {
+        if(language.equals("Javascript")){
+            return buildNodeLauncher(sutrFiles);
+        }
         return buildPythonLauncher(sutrFiles);
 
     }
