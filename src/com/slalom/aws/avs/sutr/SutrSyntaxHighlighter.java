@@ -3,48 +3,46 @@ package com.slalom.aws.avs.sutr;
 import com.intellij.lexer.Lexer;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.editor.DefaultLanguageHighlighterColors;
-import com.intellij.openapi.editor.HighlighterColors;
 import com.intellij.openapi.editor.colors.TextAttributesKey;
 import com.intellij.openapi.fileTypes.SyntaxHighlighterBase;
-import com.intellij.psi.TokenType;
 import com.intellij.psi.tree.IElementType;
 import com.slalom.aws.avs.sutr.psi.SutrTypes;
 import org.jetbrains.annotations.NotNull;
 
-public class SutrSyntaxHighlighter extends SyntaxHighlighterBase {
+class SutrSyntaxHighlighter extends SyntaxHighlighterBase {
 
     private static final Logger log = Logger.getInstance(SutrSyntaxHighlighter.class);
 
     private static final TextAttributesKey[] EMPTY_KEYS = new TextAttributesKey[0];
 
-    public static final TextAttributesKey COMMENT = TextAttributesKey.createTextAttributesKey("COMMENT", DefaultLanguageHighlighterColors.LINE_COMMENT);
+    static final TextAttributesKey COMMENT = TextAttributesKey.createTextAttributesKey("COMMENT", DefaultLanguageHighlighterColors.LINE_COMMENT);
     private static final TextAttributesKey[] COMMENT_KEYS = new TextAttributesKey[]{COMMENT};
 
-    public static final TextAttributesKey BAD_CHARACTER = TextAttributesKey.createTextAttributesKey("BAD_CHARACTER", HighlighterColors.BAD_CHARACTER);
-    private static final TextAttributesKey[] BAD_CHAR_KEYS = new TextAttributesKey[]{BAD_CHARACTER};
+//    public static final TextAttributesKey BAD_CHARACTER = TextAttributesKey.createTextAttributesKey("BAD_CHARACTER", HighlighterColors.BAD_CHARACTER);
+//    private static final TextAttributesKey[] BAD_CHAR_KEYS = new TextAttributesKey[]{BAD_CHARACTER};
 
-    public static final TextAttributesKey KEYWORD = TextAttributesKey.createTextAttributesKey("KEYWORD", DefaultLanguageHighlighterColors.KEYWORD);
+    static final TextAttributesKey KEYWORD = TextAttributesKey.createTextAttributesKey("KEYWORD", DefaultLanguageHighlighterColors.KEYWORD);
     private static final TextAttributesKey[] KEYWORD_KEYS = new TextAttributesKey[]{KEYWORD};
 
-    public static final TextAttributesKey TYPE_NAME = TextAttributesKey.createTextAttributesKey("TYPE_NAME", DefaultLanguageHighlighterColors.IDENTIFIER);
+    static final TextAttributesKey TYPE_NAME = TextAttributesKey.createTextAttributesKey("TYPE_NAME", DefaultLanguageHighlighterColors.IDENTIFIER);
     private static final TextAttributesKey[] TYPE_NAME_KEYS = new TextAttributesKey[]{ TYPE_NAME };
 
-    public static final TextAttributesKey CUSTOM_TYPE_ITEM = TextAttributesKey.createTextAttributesKey("CUSTOM_TYPE_ITEM", DefaultLanguageHighlighterColors.CONSTANT);
+    static final TextAttributesKey CUSTOM_TYPE_ITEM = TextAttributesKey.createTextAttributesKey("CUSTOM_TYPE_ITEM", DefaultLanguageHighlighterColors.CONSTANT);
     private static final TextAttributesKey[] CUSTOM_TYPE_ITEM_KEYS = new TextAttributesKey[]{ CUSTOM_TYPE_ITEM };
 
-    public static final TextAttributesKey LITERAL_PHRASE = TextAttributesKey.createTextAttributesKey("LITERAL_PHRASE", DefaultLanguageHighlighterColors.STRING);
+    static final TextAttributesKey LITERAL_PHRASE = TextAttributesKey.createTextAttributesKey("LITERAL_PHRASE", DefaultLanguageHighlighterColors.STRING);
     private static final TextAttributesKey[] LITERAL_PHRASE_KEYS = new TextAttributesKey[]{ LITERAL_PHRASE };
 
-    public static final TextAttributesKey SUTR_NAME = TextAttributesKey.createTextAttributesKey("SUTR_NAME", DefaultLanguageHighlighterColors.IDENTIFIER);
+    static final TextAttributesKey SUTR_NAME = TextAttributesKey.createTextAttributesKey("SUTR_NAME", DefaultLanguageHighlighterColors.IDENTIFIER);
     private static final TextAttributesKey[] SUTR_NAME_KEYS = new TextAttributesKey[]{ SUTR_NAME };
 
-    public static final TextAttributesKey UTTERANCE_PART = TextAttributesKey.createTextAttributesKey("UTTERANCE_PART", DefaultLanguageHighlighterColors.STRING);
+    static final TextAttributesKey UTTERANCE_PART = TextAttributesKey.createTextAttributesKey("UTTERANCE_PART", DefaultLanguageHighlighterColors.STRING);
     private static final TextAttributesKey[] UTTERANCE_PART_KEYS = new TextAttributesKey[]{ UTTERANCE_PART };
 
-    public static final TextAttributesKey SLOT = TextAttributesKey.createTextAttributesKey("SLOT", DefaultLanguageHighlighterColors.NUMBER);
+    static final TextAttributesKey SLOT = TextAttributesKey.createTextAttributesKey("SLOT", DefaultLanguageHighlighterColors.NUMBER);
     private static final TextAttributesKey[] SLOT_KEYS = new TextAttributesKey[]{ SLOT };
 
-    public static final TextAttributesKey FUNCTION_NAME = TextAttributesKey.createTextAttributesKey("FUNCTION_NAME", DefaultLanguageHighlighterColors.INSTANCE_METHOD);
+    static final TextAttributesKey FUNCTION_NAME = TextAttributesKey.createTextAttributesKey("FUNCTION_NAME", DefaultLanguageHighlighterColors.INSTANCE_METHOD);
     private static final TextAttributesKey[] FUNCTION_NAME_KEYS = new TextAttributesKey[]{ FUNCTION_NAME };
 
 
@@ -78,8 +76,8 @@ public class SutrSyntaxHighlighter extends SyntaxHighlighterBase {
             return SLOT_KEYS;
         } else if (tokenType.equals(SutrTypes.SutrFUNCTION_NAME)) {
             return FUNCTION_NAME_KEYS;
-        } else if (tokenType.equals(TokenType.BAD_CHARACTER)) {
-            return BAD_CHAR_KEYS;
+//        } else if (tokenType.equals(TokenType.BAD_CHARACTER)) {
+//            return BAD_CHAR_KEYS;
         } else {
             return EMPTY_KEYS;
         }

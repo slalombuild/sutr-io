@@ -1,191 +1,30 @@
 package com.slalom.aws.avs.sutr.conf;
 
-import com.intellij.ide.DataManager;
-import com.intellij.ide.util.PropertiesComponent;
-import com.intellij.openapi.actionSystem.CommonDataKeys;
-import com.intellij.openapi.actionSystem.DataContext;
-import com.intellij.openapi.fileChooser.*;
-import com.intellij.openapi.options.Configurable;
-import com.intellij.openapi.options.ConfigurationException;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.ui.TextFieldWithBrowseButton;
-import com.intellij.openapi.util.io.FileUtil;
-import com.intellij.openapi.vfs.LocalFileSystem;
-import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.openapi.vfs.VirtualFileWrapper;
-import org.jetbrains.annotations.Nls;
-import org.jetbrains.annotations.Nullable;
-
-import javax.swing.*;
-import java.io.File;
+import com.intellij.ide.util.PropertyName;
 
 /**
  * Created by stryderc on 6/7/2016.
- * <p>
- * Config manager for the Sutr.io plugin.
+ *
+ * Properties that are used by the Sutr.io plugin.
  */
+public class SutrConfig {
 
-public class SutrConfig implements Configurable {
+    @PropertyName(value = "sutr.handlerTemplateFileLocation")
+    public String handlerTemplateLocation;
 
-    private JPanel myPanel;
+    @PropertyName(value = "sutr.handlerOutputLocation")
+    public String handlerOutputLocation;
+    public String defaultHandlerOutputLocation = "$PROJECT_ROOT$/ask/";
 
-    private TextFieldWithBrowseButton handlerTemplateLocationBrowseButton;
-    private TextFieldWithBrowseButton handlerOutputLocationBrowseButton;
-    private TextFieldWithBrowseButton intentOutputLocationBrowseButton;
-    private TextFieldWithBrowseButton utterancesOutputLocationBrowseButton;
+    @PropertyName(value = "sutr.intentOutputLocation")
+    public String intentOutputLocation;
+    public String defaultIntentOutputLocation = "$PROJECT_ROOT$/ask/intent.json";
 
-    private JCheckBox useCustomOutputPathsCheckBox;
-    private JLabel handlerOutputFileLabel;
-    private JLabel utterancesOutputFileLabel;
-    private JLabel intentOutputFileLabel;
-    private JLabel sutrErrorLabel;
+    @PropertyName(value = "sutr.utterancesOutputLocation")
+    public String utterancesOutputLocation;
+    public String defaultUtterancesOutputLocation = "$PROJECT_ROOT$/ask/skill.utr";
 
-    private SutrProperties _properties;
+    @PropertyName(value="sutr.useCustomPaths", defaultValue = "false")
+    public boolean useCustomPaths;
 
-    @Nullable
-    @Override
-    public JComponent createComponent() {
-
-        Project project = getProject();
-
-        PropertiesComponent comp = PropertiesComponent.getInstance(project);
-
-        _properties = new SutrProperties();
-
-        comp.loadFields(_properties);
-
-        handlerTemplateLocationBrowseButton.setText(_properties.handlerTemplateLocation);
-
-        useCustomOutputPathsCheckBox.setSelected(_properties.useCustomPaths);
-        useCustomOutputPathsCheckBox.addActionListener(e -> {
-            boolean isSelected = ((JCheckBox) e.getSource()).isSelected();
-            EnableCustomPaths(isSelected);
-        });
-
-        AddBrowserHandlers(project);
-        EnableCustomPaths(useCustomOutputPathsCheckBox.isSelected());
-
-        return myPanel;
-    }
-
-    private void AddBrowserHandlers(Project project) {
-        FileChooserDescriptor fileDescriptor = FileChooserDescriptorFactory.createSingleFileDescriptor();
-
-        handlerTemplateLocationBrowseButton.addBrowseFolderListener("Handler Template File", "Select handler template file", project, fileDescriptor);
-
-        AddFileSelectorHandler(handlerOutputLocationBrowseButton, project, "Handler Output File", "Provide the path and file name where handler output should be saved.");
-        AddFileSelectorHandler(intentOutputLocationBrowseButton, project, "Intent Output File", "Provide the path and file name where the intent.json should be saved.");
-        AddFileSelectorHandler(utterancesOutputLocationBrowseButton, project, "Utterances Location", "Provide the path and file name where utterances should be saved.");
-
-    }
-
-    private void AddFileSelectorHandler(TextFieldWithBrowseButton textFieldWithBrowseButton, Project project, String label, String description) {
-
-        textFieldWithBrowseButton.addActionListener(
-            e -> {
-                final FileSaverDialog dialog = FileChooserFactory.getInstance().createSaveFileDialog(new FileSaverDescriptor(label, description), myPanel);
-                final String path = FileUtil.toSystemIndependentName(getFileName(textFieldWithBrowseButton));
-                final int idx = path.lastIndexOf("/");
-                VirtualFile baseDir = idx == -1 ? project.getBaseDir() :
-                        (LocalFileSystem.getInstance().refreshAndFindFileByIoFile(new File(path.substring(0, idx))));
-                baseDir = baseDir == null ? project.getBaseDir() : baseDir;
-                final String name = idx == -1 ? path : path.substring(idx + 1);
-                final VirtualFileWrapper fileWrapper = dialog.save(baseDir, name);
-                if (fileWrapper != null) {
-                    textFieldWithBrowseButton.setText(fileWrapper.getFile().getPath());
-                }
-            }
-        );
-    }
-
-    private String getFileName(TextFieldWithBrowseButton textFieldWithBrowseButton) {
-        return FileUtil.expandUserHome(textFieldWithBrowseButton.getText().trim());
-    }
-
-    private void EnableCustomPaths(boolean isEnabled) {
-
-        for (TextFieldWithBrowseButton c : new TextFieldWithBrowseButton[] {handlerOutputLocationBrowseButton, intentOutputLocationBrowseButton, utterancesOutputLocationBrowseButton}) {
-
-            c.setEditable(isEnabled);
-            c.setEnabled(isEnabled);
-            c.setButtonEnabled(isEnabled);
-        }
-
-        handlerOutputFileLabel.setEnabled(isEnabled);
-        intentOutputFileLabel.setEnabled(isEnabled);
-        utterancesOutputFileLabel.setEnabled(isEnabled);
-
-        if(isEnabled){
-            handlerOutputLocationBrowseButton.setText(_properties.handlerOutputLocation);
-            intentOutputLocationBrowseButton.setText(_properties.intentOutputLocation);
-            utterancesOutputLocationBrowseButton.setText(_properties.utterancesOutputLocation);
-        }
-        else{
-            handlerOutputLocationBrowseButton.setText(_properties.defaultHandlerOutputLocation);
-            intentOutputLocationBrowseButton.setText(_properties.defaultIntentOutputLocation);
-            utterancesOutputLocationBrowseButton.setText(_properties.defaultUtterancesOutputLocation);
-        }
-    }
-
-    @Nls
-    @Override
-    public String getDisplayName() {
-        return "Sutr.io";
-    }
-
-    @Nullable
-    @Override
-    public String getHelpTopic() {
-        return null;  // Figure out what works best here...can we link this to a web page? --stryderc 6/7/2016
-    }
-
-    @Override
-    public boolean isModified() {
-        return true;
-    }
-
-    @Override
-    public void apply() throws ConfigurationException {
-        String _handlerTemplateLocation = handlerTemplateLocationBrowseButton.getText();
-        String _handlerOutputLocation = handlerOutputLocationBrowseButton.getText();
-        String _utterancesOutputLocation = utterancesOutputLocationBrowseButton.getText();
-        String _intentOutputLocation = intentOutputLocationBrowseButton.getText();
-
-        Boolean _useDefaultPaths = useCustomOutputPathsCheckBox.isSelected();
-
-        if (!_handlerOutputLocation.equals(_properties.handlerOutputLocation)
-                || !_handlerTemplateLocation.equals(_properties.handlerTemplateLocation)
-                || !_intentOutputLocation.equals(_properties.intentOutputLocation)
-                || !_utterancesOutputLocation.equals(_properties.utterancesOutputLocation)
-                || _useDefaultPaths != _properties.useCustomPaths
-                ) {
-
-            Project project = getProject();
-
-            PropertiesComponent comp = PropertiesComponent.getInstance(project);
-
-            _properties.handlerTemplateLocation = _handlerTemplateLocation;
-            _properties.handlerOutputLocation = _handlerOutputLocation;
-            _properties.utterancesOutputLocation = _utterancesOutputLocation;
-            _properties.intentOutputLocation = _intentOutputLocation;
-
-            comp.saveFields(_properties);
-        }
-    }
-
-    @Override
-    public void reset() {
-
-    }
-
-    @Override
-    public void disposeUIResources() {
-
-    }
-
-    public Project getProject() {
-        DataContext dataContext = DataManager.getInstance().getDataContextFromFocus().getResult();
-
-        return (Project) dataContext.getData(CommonDataKeys.PROJECT.getName());
-    }
 }

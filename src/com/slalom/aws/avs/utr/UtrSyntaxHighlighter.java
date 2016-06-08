@@ -6,7 +6,6 @@ import com.intellij.openapi.editor.DefaultLanguageHighlighterColors;
 import com.intellij.openapi.editor.HighlighterColors;
 import com.intellij.openapi.editor.colors.TextAttributesKey;
 import com.intellij.openapi.fileTypes.SyntaxHighlighterBase;
-import com.intellij.psi.TokenType;
 import com.intellij.psi.tree.IElementType;
 import com.slalom.aws.avs.utr.psi.UtrTypes;
 import org.jetbrains.annotations.NotNull;
@@ -17,8 +16,8 @@ public class UtrSyntaxHighlighter extends SyntaxHighlighterBase {
 
     private static final TextAttributesKey[] EMPTY_KEYS = new TextAttributesKey[0];
 
-    public static final TextAttributesKey BAD_CHARACTER = TextAttributesKey.createTextAttributesKey("BAD_CHARACTER", HighlighterColors.BAD_CHARACTER);
-    private static final TextAttributesKey[] BAD_CHAR_KEYS = new TextAttributesKey[]{BAD_CHARACTER};
+//    public static final TextAttributesKey BAD_CHARACTER = TextAttributesKey.createTextAttributesKey("BAD_CHARACTER", HighlighterColors.BAD_CHARACTER);
+//    private static final TextAttributesKey[] BAD_CHAR_KEYS = new TextAttributesKey[]{BAD_CHARACTER};
 
     public static final TextAttributesKey INTENT = TextAttributesKey.createTextAttributesKey("INTENT", DefaultLanguageHighlighterColors.INSTANCE_METHOD);
     private static final TextAttributesKey[] INTENT_KEYS = new TextAttributesKey[]{INTENT};
@@ -54,8 +53,8 @@ public class UtrSyntaxHighlighter extends SyntaxHighlighterBase {
             return LITERAL_PHRASE_KEYS;
         } else if (tokenType.equals(UtrTypes.UtrSLOT)) {
             return SLOT_KEYS;
-        } else if (tokenType.equals(TokenType.BAD_CHARACTER)) {
-            return BAD_CHAR_KEYS;
+//        } else if (tokenType.equals(TokenType.BAD_CHARACTER)) {
+//            return BAD_CHAR_KEYS;
         } else {
             return EMPTY_KEYS;
         }

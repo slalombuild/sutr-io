@@ -18,7 +18,7 @@
   </change-notes>
 
   <!-- please see https://confluence.jetbrains.com/display/IDEADEV/Build+Number+Ranges for description -->
-  <idea-version since-build="131"/>
+  <idea-version since-build="145"/>
 
   <!-- please see https://confluence.jetbrains.com/display/IDEADEV/Plugin+Compatibility+with+IntelliJ+Platform+Products
        on how to target different products -->
@@ -27,7 +27,7 @@
   <depends>com.intellij.modules.lang</depends>
 
   <extensions defaultExtensionNs="com.intellij">
-    <applicationConfigurable instance="com.slalom.aws.avs.sutr.conf.SutrConfig"/>
+    <applicationConfigurable instance="com.slalom.aws.avs.sutr.conf.SutrConfigPanel"/>
     <fileTypeFactory implementation="com.slalom.aws.avs.sutr.SutrFileTypeFactory" />
     <fileTypeFactory implementation="com.slalom.aws.avs.utr.UtrFileTypeFactory" />
     <lang.parserDefinition language="sutr" implementationClass="com.slalom.aws.avs.sutr.SutrParserDefinition"/>
@@ -60,6 +60,7 @@
       <action id="sutr.action.copy.Intent" class="com.slalom.aws.avs.sutr.actions.CopyIntentJson" text="Copy Intents"  />
       <action id="sutr.action.copy.Utterances" class="com.slalom.aws.avs.sutr.actions.CopyUtterances" text="Copy Utterances" />
       <action id="sutr.action.copy.CustomType" class="com.slalom.aws.avs.sutr.actions.CopyCustomType" text="Copy CustomType" />
+      <!--<action id="sutr.action.generate.voiceModel" class="com.slalom.aws.avs.sutr.actions.GenerateVoiceModel" text="Generate ASK" />-->
 
       <!---->
 
@@ -73,6 +74,12 @@
 
     </group>
 
+    <action id="com.slalom.aws.avs.sutr.actions.GenerateVoiceModel"
+            class="com.slalom.aws.avs.sutr.actions.GenerateVoiceModel" text="Generate ASK"
+            description="Generates the voice model for the ASK">
+      <add-to-group group-id="sutr.action.group" anchor="first"/>
+      <keyboard-shortcut keymap="$default" first-keystroke="shift ctrl G"/>
+    </action>
   </actions>
 
 </idea-plugin>

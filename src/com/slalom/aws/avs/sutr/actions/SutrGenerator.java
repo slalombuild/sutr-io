@@ -20,7 +20,7 @@ class SutrGenerator {
 
     static StringBuilder buildIntent(List<SutrFile> sutrFiles) throws SutrGeneratorException {
         Intents intents = new Intents();
-        List<Intent> intentCollection = new ArrayList<Intent>();
+        List<Intent> intentCollection = new ArrayList<>();
 
         BuildSutrDefinitions sutrDefinitions = new BuildSutrDefinitions(sutrFiles).invoke();
 
@@ -32,7 +32,7 @@ class SutrGenerator {
 
             String intent_name = sutrDef.getSutrName().getText();
 
-            List<Slot> slots = new ArrayList<Slot>();
+            List<Slot> slots = new ArrayList<>();
 
             for (SutrParam param : sutrDef.getSutrParams().getSutrParamList()) {
                 String typeName = param.getTypeName().getText();
@@ -252,8 +252,9 @@ class SutrGenerator {
         return customTypeItemListBuilder;
     }
 
-    static StringBuilder buildHandler(List<SutrFile> sutrFiles, String template) {
-        return null;
+    static StringBuilder buildHandler(List<SutrFile> sutrFiles, String template) throws SutrGeneratorException {
+        return buildPythonLauncher(sutrFiles);
+
     }
 
     private static class BuildSutrDefinitions {
