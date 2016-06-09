@@ -1,5 +1,8 @@
 package com.slalom.aws.avs.sutr.actions;
 
+import com.github.mustachejava.DefaultMustacheFactory;
+import com.github.mustachejava.Mustache;
+import com.github.mustachejava.MustacheFactory;
 import com.google.gson.Gson;
 import com.slalom.aws.avs.sutr.actions.constants.PythonText;
 import com.slalom.aws.avs.sutr.actions.exceptions.SutrGeneratorException;
@@ -11,6 +14,8 @@ import com.slalom.aws.avs.sutr.psi.*;
 import com.slalom.aws.avs.sutr.psi.impl.SutrLiteralTypeImpl;
 import org.jetbrains.annotations.NotNull;
 
+import java.io.StringReader;
+import java.io.StringWriter;
 import java.util.*;
 
 /**
@@ -117,6 +122,8 @@ class SutrGenerator {
     }
 
     static StringBuilder buildNodeLauncher(List<SutrFile> sutrFiles) throws SutrGeneratorException {
+        String result = TestMustache();
+
 
         String premable =
                 "function onIntent(intentRequest, session, callback) {\n" +
@@ -163,6 +170,22 @@ class SutrGenerator {
         builder.append(postamble);
 
         return builder;
+    }
+
+    private static String TestMustache() {
+
+        HashMap<String, Object> scopes = new HashMap<>();
+        scopes.put("name", "Mustache");
+        scopes.put("feature", "SomethingElse");
+
+        StringWriter sw = new StringWriter();
+
+        MustacheFactory mf = new DefaultMustacheFactory();
+        Mustache mustache = mf.compile(new StringReader("{{name}}, {{feature.description}}!"), "example");
+        mustache.execute(sw, scopes);
+
+        return sw.toString();
+
     }
 
     private static List<SutrObject> getSutrObjects(List<SutrFile> sutrFiles) {

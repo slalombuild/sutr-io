@@ -25,7 +25,7 @@
   <!-- uncomment to enable plugin in all products
   -->
   <depends>com.intellij.modules.lang</depends>
-
+  <!--<depends>com.github.spullara.mustache.java</depends>-->
   <extensions defaultExtensionNs="com.intellij">
     <applicationConfigurable instance="com.slalom.aws.avs.sutr.conf.SutrConfigPanel"/>
     <fileTypeFactory implementation="com.slalom.aws.avs.sutr.SutrFileTypeFactory" />
