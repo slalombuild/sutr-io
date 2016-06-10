@@ -5,7 +5,7 @@ import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.project.Project;
 import com.slalom.aws.avs.sutr.SutrPluginUtil;
 import com.slalom.aws.avs.sutr.actions.exceptions.SutrGeneratorException;
-import com.slalom.aws.avs.sutr.conf.SutrConfig;
+import com.slalom.aws.avs.sutr.conf.SutrConfigProvider;
 import com.slalom.aws.avs.sutr.psi.SutrFile;
 
 import java.io.File;
@@ -29,39 +29,15 @@ public class GenerateVoiceModel extends SutrAction {
         if (project == null || sutrFiles.isEmpty()) return;
 
         try {
-            SutrConfig sutrConfig = SutrPluginUtil.getConfigProvider();
+            SutrConfigProvider sutrConfigProvider = SutrPluginUtil.getConfigProvider();
 
             final StringBuilder buildIntent = SutrGenerator.buildIntent(sutrFiles);
             final StringBuilder buildUtterances = SutrGenerator.buildUtterances(sutrFiles);
-            final StringBuilder buildHandler = SutrGenerator.buildHandler(sutrFiles, sutrConfig.handlerLanguage);
+            final StringBuilder buildHandler = SutrGenerator.buildHandler(sutrFiles, sutrConfigProvider.getCurrentHandlerTemplatePath());
 
-            String handlerPath;
-            String intentPath;
-            String utterancesPath;
-
-            if(sutrConfig.useCustomPaths){
-                handlerPath = sutrConfig.handlerOutputLocation;
-                intentPath = sutrConfig.intentOutputLocation;
-                utterancesPath = sutrConfig.utterancesOutputLocation;
-            }
-            else{
-                String basePath = project.getBasePath();
-                if(basePath == null){
-                    throw new SutrGeneratorException("Unable to locate the project base path");
-                }
-
-                handlerPath = sutrConfig.defaultHandlerOutputLocation.replace("$PROJECT_ROOT$", basePath);
-
-                if(sutrConfig.handlerLanguage.equals("Javascript")){
-                    handlerPath += "handler.js";
-                }
-                else{
-                    handlerPath += "handler.py";
-                }
-
-                intentPath = sutrConfig.intentOutputLocation.replace("$PROJECT_ROOT$", basePath);
-                utterancesPath = sutrConfig.utterancesOutputLocation.replace("$PROJECT_ROOT$", basePath);
-            }
+            String handlerPath = sutrConfigProvider.getHandlerOutputLocation();
+            String intentPath = sutrConfigProvider.getIntentOutputLocation();
+            String utterancesPath = sutrConfigProvider.getUtterancesOutputLocation();
 
             WriteContentToFile(buildHandler, handlerPath);
             WriteContentToFile(buildIntent, intentPath);

@@ -1,11 +1,10 @@
 package com.slalom.aws.avs.sutr;
 
 import com.intellij.ide.DataManager;
-import com.intellij.ide.util.PropertiesComponent;
 import com.intellij.openapi.actionSystem.CommonDataKeys;
 import com.intellij.openapi.actionSystem.DataContext;
 import com.intellij.openapi.project.Project;
-import com.slalom.aws.avs.sutr.conf.SutrConfig;
+import com.slalom.aws.avs.sutr.conf.SutrConfigProvider;
 
 /**
  * Created by stryderc on 6/8/2016.
@@ -18,27 +17,12 @@ public class SutrPluginUtil {
         return (Project) dataContext.getData(CommonDataKeys.PROJECT.getName());
     }
 
-    public static SutrConfig getConfigProvider() {
+    public static SutrConfigProvider getConfigProvider() {
 
-        Project project = SutrPluginUtil.getProject();
+        SutrConfigProvider configProvider = new SutrConfigProvider();
 
-        PropertiesComponent comp = PropertiesComponent.getInstance(project);
+        configProvider.loadProperties(SutrPluginUtil.getProject());
 
-        SutrConfig properties = new SutrConfig();
-
-        comp.loadFields(properties);
-
-
-        return properties;
-    }
-
-    public static void saveConfig(SutrConfig properties){
-
-        Project project = SutrPluginUtil.getProject();
-
-        PropertiesComponent comp = PropertiesComponent.getInstance(project);
-
-        comp.saveFields(properties);
-
+        return configProvider;
     }
 }

@@ -4,7 +4,7 @@ import com.google.gson.Gson;
 import com.slalom.aws.avs.sutr.SutrPluginUtil;
 import com.slalom.aws.avs.sutr.actions.constants.PythonText;
 import com.slalom.aws.avs.sutr.actions.exceptions.SutrGeneratorException;
-import com.slalom.aws.avs.sutr.conf.SutrConfig;
+import com.slalom.aws.avs.sutr.conf.SutrConfigProvider;
 import com.slalom.aws.avs.sutr.models.Intents;
 import com.slalom.aws.avs.sutr.models.Utterance;
 import com.slalom.aws.avs.sutr.mustache.SutrMustacheBuilderException;
@@ -278,11 +278,11 @@ public class SutrGenerator {
     }
 
     static StringBuilder buildHandler(List<SutrFile> sutrFiles, String language) throws SutrGeneratorException {
-        SutrConfig config = SutrPluginUtil.getConfigProvider();
+        SutrConfigProvider config = SutrPluginUtil.getConfigProvider();
 
 //            String handlerTemplateLocation = config.handlerTemplateLocation;
 
-//            String template = config.getHandlerTemplate();
+//            String template = config.getCurrentHandlerTemplatePath();
 
         String template =  "C:\\Users\\stryderc\\dev\\sources\\sutr-io\\src\\resources\\templates\\python.mustache";
 

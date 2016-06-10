@@ -6,7 +6,7 @@ import com.intellij.openapi.project.Project;
 import com.slalom.aws.avs.sutr.SutrPluginUtil;
 import com.slalom.aws.avs.sutr.actions.ActionUtil;
 import com.slalom.aws.avs.sutr.actions.SutrAction;
-import com.slalom.aws.avs.sutr.conf.SutrConfig;
+import com.slalom.aws.avs.sutr.conf.SutrConfigProvider;
 import com.slalom.aws.avs.sutr.mustache.SutrMustacheBuilderException;
 import com.slalom.aws.avs.sutr.mustache.SutrMustacheModelBuilder;
 import com.slalom.aws.avs.sutr.psi.SutrFile;
@@ -25,11 +25,11 @@ public class GenerateHandler extends SutrAction {
         if (project == null || sutrFiles.isEmpty()) return;
 
         try {
-            SutrConfig config = SutrPluginUtil.getConfigProvider();
+            SutrConfigProvider config = SutrPluginUtil.getConfigProvider();
 
 //            String handlerTemplateLocation = config.handlerTemplateLocation;
 
-//            String template = config.getHandlerTemplate();
+//            String template = config.getCurrentHandlerTemplatePath();
 
             String template =  "C:\\Users\\stryderc\\dev\\sources\\sutr-io\\src\\resources\\templates\\python.mustache";
 

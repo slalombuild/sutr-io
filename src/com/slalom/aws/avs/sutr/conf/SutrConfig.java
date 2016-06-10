@@ -2,6 +2,8 @@ package com.slalom.aws.avs.sutr.conf;
 
 import com.intellij.ide.util.PropertyName;
 
+import java.util.List;
+
 /**
  * Created by stryderc on 6/7/2016.
  *
@@ -9,26 +11,26 @@ import com.intellij.ide.util.PropertyName;
  */
 public class SutrConfig {
 
+    @PropertyName(value="sutr.templates")
+    public List<String> templateLocations;
+
     @PropertyName(value = "sutr.handlerTemplateFileLocation")
     public String handlerTemplateLocation;
 
     @PropertyName(value = "sutr.handlerOutputLocation")
     public String handlerOutputLocation;
-    public String defaultHandlerOutputLocation = "$PROJECT_ROOT$/ask/";
 
     @PropertyName(value = "sutr.intentOutputLocation")
     public String intentOutputLocation;
-    public String defaultIntentOutputLocation = "$PROJECT_ROOT$/ask/intentName.json";
 
     @PropertyName(value = "sutr.utterancesOutputLocation")
     public String utterancesOutputLocation;
-    public String defaultUtterancesOutputLocation = "$PROJECT_ROOT$/ask/skill.utr";
 
     @PropertyName(value="sutr.useCustomPaths", defaultValue = "false")
     public boolean useCustomPaths;
 
-    @PropertyName(value="sutr.handlerLanguage")
-    public String handlerLanguage;
+    @PropertyName(value="sutr.selecteHandlerTemplate")
+    public String selecteHandlerTemplate;
     private String handlerTemplate;
 
 
