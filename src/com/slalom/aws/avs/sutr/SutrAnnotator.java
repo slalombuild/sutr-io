@@ -58,7 +58,7 @@ public class SutrAnnotator implements Annotator {
             final boolean isBuiltInType = ActionUtil.BUILT_IN_TYPES.containsKey(psiElement.getText());
 
             if (!isBuiltInType && (((SutrTypeNameImpl) psiElement).resolve() == null)) {
-                annotationHolder.createErrorAnnotation(psiElement, "Not a built in type and not declared as literal or custom type");
+                annotationHolder.createErrorAnnotation(psiElement, "Not a built in slotType and not declared as literal or custom slotType");
             }
         }
 
@@ -108,7 +108,7 @@ public class SutrAnnotator implements Annotator {
             final boolean textMatch = customType.getTypeName().getText().equals(psiElement.getTypeName().getText());
             final boolean nodeMatch = customType.getTypeName().getNode().equals(psiElement.getTypeName().getNode());
             if (textMatch && !nodeMatch) {
-                annotationHolder.createErrorAnnotation(psiElement, "Duplicate type definition found.");
+                annotationHolder.createErrorAnnotation(psiElement, "Duplicate slotType definition found.");
             }
         }
     }
@@ -118,7 +118,7 @@ public class SutrAnnotator implements Annotator {
         if (psiElement instanceof SutrSlotName) {
 
             if (!hasParam(psiElement)) {
-                annotationHolder.createErrorAnnotation(psiElement, "Slot name not defined in Sutr params.");
+                annotationHolder.createErrorAnnotation(psiElement, "Slot slotName not defined in Sutr params.");
             }
             if (isDuplicatedSlot(psiElement)) {
                 annotationHolder.createErrorAnnotation(psiElement, "Slot used more than once in utterance.");

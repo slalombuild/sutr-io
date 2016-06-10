@@ -18,7 +18,7 @@ public class SutrPluginUtil {
         return (Project) dataContext.getData(CommonDataKeys.PROJECT.getName());
     }
 
-    public static SutrConfig getConfig() {
+    public static SutrConfig getConfigProvider() {
 
         Project project = SutrPluginUtil.getProject();
 
@@ -27,6 +27,7 @@ public class SutrPluginUtil {
         SutrConfig properties = new SutrConfig();
 
         comp.loadFields(properties);
+
 
         return properties;
     }

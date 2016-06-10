@@ -18,7 +18,7 @@ public class SutrConfig {
 
     @PropertyName(value = "sutr.intentOutputLocation")
     public String intentOutputLocation;
-    public String defaultIntentOutputLocation = "$PROJECT_ROOT$/ask/intent.json";
+    public String defaultIntentOutputLocation = "$PROJECT_ROOT$/ask/intentName.json";
 
     @PropertyName(value = "sutr.utterancesOutputLocation")
     public String utterancesOutputLocation;
@@ -29,5 +29,7 @@ public class SutrConfig {
 
     @PropertyName(value="sutr.handlerLanguage")
     public String handlerLanguage;
+    private String handlerTemplate;
+
 
 }

@@ -1,31 +1,29 @@
 package com.slalom.aws.avs.sutr.actions;
 
-import com.github.mustachejava.DefaultMustacheFactory;
-import com.github.mustachejava.Mustache;
-import com.github.mustachejava.MustacheFactory;
 import com.google.gson.Gson;
+import com.slalom.aws.avs.sutr.SutrPluginUtil;
 import com.slalom.aws.avs.sutr.actions.constants.PythonText;
 import com.slalom.aws.avs.sutr.actions.exceptions.SutrGeneratorException;
-import com.slalom.aws.avs.sutr.models.Intent;
+import com.slalom.aws.avs.sutr.conf.SutrConfig;
 import com.slalom.aws.avs.sutr.models.Intents;
-import com.slalom.aws.avs.sutr.models.Slot;
 import com.slalom.aws.avs.sutr.models.Utterance;
+import com.slalom.aws.avs.sutr.mustache.SutrMustacheBuilderException;
+import com.slalom.aws.avs.sutr.mustache.SutrMustacheModelBuilder;
+import com.slalom.aws.avs.sutr.mustache.models.SutrIntentModel;
+import com.slalom.aws.avs.sutr.mustache.models.SutrSlotModel;
 import com.slalom.aws.avs.sutr.psi.*;
 import com.slalom.aws.avs.sutr.psi.impl.SutrLiteralTypeImpl;
 import org.jetbrains.annotations.NotNull;
 
-import java.io.StringReader;
-import java.io.StringWriter;
 import java.util.*;
 
 /**
  * Created by stryderc on 1/8/2016.
  */
-class SutrGenerator {
+public class SutrGenerator {
 
     static StringBuilder buildIntent(List<SutrFile> sutrFiles) throws SutrGeneratorException {
         Intents intents = new Intents();
-        List<Intent> intentCollection = new ArrayList<>();
 
         BuildSutrDefinitions sutrDefinitions = new BuildSutrDefinitions(sutrFiles).invoke();
 
@@ -33,13 +31,28 @@ class SutrGenerator {
             throw new SutrGeneratorException("No Sutr definitions found");
         }
 
-        for (final SutrObject sutrDef : sutrDefinitions.getSutrObjectList()) {
+        List<SutrIntentModel> sutrIntentModelCollection = GetModels(sutrDefinitions);
+
+        Gson gson = new Gson();
+        intents.sutrIntentModels = sutrIntentModelCollection;
+
+        return new StringBuilder(gson.toJson(intents));
+    }
+
+    public static List<SutrIntentModel> GetModels(BuildSutrDefinitions sutrDefinitions) throws SutrGeneratorException {
+        List<SutrIntentModel> sutrIntentModelCollection = new ArrayList<>();
+
+        List<SutrObject> sutrObjectList = sutrDefinitions.getSutrObjectList();
+        for (int i1 = 0; i1 < sutrObjectList.size(); i1++) {
+            SutrObject sutrDef = sutrObjectList.get(i1);
 
             String intent_name = sutrDef.getSutrName().getText();
 
-            List<Slot> slots = new ArrayList<>();
+            List<SutrSlotModel> slots = new ArrayList<>();
 
-            for (SutrParam param : sutrDef.getSutrParams().getSutrParamList()) {
+            List<SutrParam> sutrParamList = sutrDef.getSutrParams().getSutrParamList();
+            for (int i = 0; i < sutrParamList.size(); i++) {
+                SutrParam param = sutrParamList.get(i);
                 String typeName = param.getTypeName().getText();
                 String paramName = param.getParamName().getText();
 
@@ -47,25 +60,30 @@ class SutrGenerator {
 
                 if (sutrDefinitions.sutrLiteralTypeKeys.containsKey(typeName)) {
                     type = ActionUtil.BUILT_IN_TYPES.get("literal");
-                } else if (sutrDefinitions.sutrCustomTypeKeys.containsKey(typeName)){
+                } else if (sutrDefinitions.sutrCustomTypeKeys.containsKey(typeName)) {
                     type = typeName;
-                } else if (ActionUtil.BUILT_IN_TYPES.containsKey(typeName)){
+                } else if (ActionUtil.BUILT_IN_TYPES.containsKey(typeName)) {
                     type = ActionUtil.BUILT_IN_TYPES.get(typeName);
-                } else{
-                    throw new SutrGeneratorException("No valid type found for slot [" + typeName + " " + paramName + "] in Sutr ["+sutrDef.getContainingFile().getName()+": " + sutrDef.getSutrName().getText()+"]");
+                } else {
+                    throw new SutrGeneratorException("No valid slotType found for slot [" + typeName + " " + paramName + "] in Sutr [" + sutrDef.getContainingFile().getName() + ": " + sutrDef.getSutrName().getText() + "]");
                 }
 
-                slots.add(new Slot(paramName, type));
+                SutrSlotModel slot = new SutrSlotModel();
+                slot.slotName = paramName;
+                slot.slotType = type;
+                slot.first = i < 1;
+                slot.defaultValue = param.getDefaultValue();
+
+                slots.add(slot);
             }
 
-            intentCollection.add(new Intent(intent_name, slots));
+            SutrIntentModel e = new SutrIntentModel(intent_name, slots);
+            e.first = i1<1;
+            e.functionName = sutrDef.getFunctionPointer().getFunctionName().getText();
+            sutrIntentModelCollection.add(e);
         }
 
-
-        Gson gson = new Gson();
-        intents.intents = intentCollection;
-
-        return new StringBuilder(gson.toJson(intents));
+        return sutrIntentModelCollection;
     }
 
     @NotNull
@@ -122,20 +140,19 @@ class SutrGenerator {
     }
 
     static StringBuilder buildNodeLauncher(List<SutrFile> sutrFiles) throws SutrGeneratorException {
-        String result = TestMustache();
 
 
         String premable =
-                "function onIntent(intentRequest, session, callback) {\n" +
+                "functionName onIntent(intentRequest, session, callback) {\n" +
                         "    console.log(\"onIntent requestId=\" + intentRequest.requestId +\n" +
                         "        \", sessionId=\" + session.sessionId);\n" +
                         "\n" +
-                        "    var intent = intentRequest.intent,\n" +
-                        "        intentName = intentRequest.intent.name;\n" +
+                        "    var intentName = intentRequest.intentName,\n" +
+                        "        intentName = intentRequest.intentName.slotName;\n" +
                         "\n";
 
         StringBuilder builder = new StringBuilder(premable);
-        List<SutrObject> sutrCollection = getSutrObjects(sutrFiles);
+        List<SutrObject> sutrCollection = getSutrObjectModel(sutrFiles);
 
         int count = 0;
 
@@ -150,12 +167,12 @@ class SutrGenerator {
             final SutrFunctionPointer functionPointer = sutr.getFunctionPointer();
 
             if (functionPointer == null) {
-                throw new SutrGeneratorException("No function pointer defined for " + sutr.getSutrName().getText());
+                throw new SutrGeneratorException("No functionName pointer defined for " + sutr.getSutrName().getText());
             }
 
             String stmt =
                     "if (\"" + sutr.getSutrName().getText() + "\" === intentName) {\n" +
-                            "        " + functionPointer.getFunctionName().getText() + "(intent, session, callback);\n" +
+                            "        " + functionPointer.getFunctionName().getText() + "(intentName, session, callback);\n" +
                             "    }";
 
             builder.append(stmt);
@@ -163,7 +180,7 @@ class SutrGenerator {
 
         String postamble =
                 " else {\n" +
-                        "        throw \"Invalid intent\";\n" +
+                        "        throw \"Invalid intentName\";\n" +
                         "     }\n" +
                         "}\n";
 
@@ -172,23 +189,7 @@ class SutrGenerator {
         return builder;
     }
 
-    private static String TestMustache() {
-
-        HashMap<String, Object> scopes = new HashMap<>();
-        scopes.put("name", "Mustache");
-        scopes.put("feature", "SomethingElse");
-
-        StringWriter sw = new StringWriter();
-
-        MustacheFactory mf = new DefaultMustacheFactory();
-        Mustache mustache = mf.compile(new StringReader("{{name}}, {{feature.description}}!"), "example");
-        mustache.execute(sw, scopes);
-
-        return sw.toString();
-
-    }
-
-    private static List<SutrObject> getSutrObjects(List<SutrFile> sutrFiles) {
+    public static List<SutrObject> getSutrObjectModel(List<SutrFile> sutrFiles) {
         List<SutrObject> sutrObjects = new ArrayList<>();
 
         for (SutrFile file : sutrFiles) {
@@ -203,16 +204,17 @@ class SutrGenerator {
 
         StringBuilder builder = new StringBuilder(PythonText.GeneratorPreamble);
 
-        List<SutrObject> sutrCollection = getSutrObjects(sutrFiles);
+        List<SutrObject> sutrCollection = getSutrObjectModel(sutrFiles);
 
         builder.append("\n").append(PythonText.OnIntentPreamble);
+
         int count = 0;
 
         for (SutrObject sutr : sutrCollection) {
             final SutrFunctionPointer functionPointer = sutr.getFunctionPointer();
 
             if (functionPointer == null) {
-                throw new SutrGeneratorException("No function pointer defined for " + sutr.getSutrName().getText());
+                throw new SutrGeneratorException("No functionName pointer defined for " + sutr.getSutrName().getText());
             }
 
             if (count == 0) {
@@ -226,7 +228,7 @@ class SutrGenerator {
                     .append(sutr.getSutrName().getText())
                     .append("\":\n");
 
-            StringBuilder paramBuilder = new StringBuilder("intent, session");
+            StringBuilder paramBuilder = new StringBuilder("intentName, session");
             StringBuilder defaultParamValueBuilder = new StringBuilder();
 
             for (final SutrParam sutrSutrParam : sutr.getSutrParams().getSutrParamList()) {
@@ -237,7 +239,7 @@ class SutrGenerator {
                         .append("        ")
                         .append(paramName.toLowerCase())
                         .append(" = ")
-                        .append("intent['slots'].get('")
+                        .append("intentName['slots'].get('")
                         .append(paramName)
                         .append("', '")
                         .append(defaultValue)
@@ -276,24 +278,36 @@ class SutrGenerator {
     }
 
     static StringBuilder buildHandler(List<SutrFile> sutrFiles, String language) throws SutrGeneratorException {
-        if(language.equals("Javascript")){
-            return buildNodeLauncher(sutrFiles);
-        }
-        return buildPythonLauncher(sutrFiles);
+        SutrConfig config = SutrPluginUtil.getConfigProvider();
 
+//            String handlerTemplateLocation = config.handlerTemplateLocation;
+
+//            String template = config.getHandlerTemplate();
+
+        String template =  "C:\\Users\\stryderc\\dev\\sources\\sutr-io\\src\\resources\\templates\\python.mustache";
+
+        SutrMustacheModelBuilder modelBuilder = new SutrMustacheModelBuilder(template);
+        try {
+            modelBuilder.Build(sutrFiles);
+            return new StringBuilder(modelBuilder.Compile());
+        } catch (SutrMustacheBuilderException e) {
+            e.printStackTrace();
+        }
+
+        return new StringBuilder();
     }
 
-    private static class BuildSutrDefinitions {
+    public static class BuildSutrDefinitions {
         private final List<SutrFile> sutrFiles;
         private List<SutrObject> sutrObjectList;
-        private Map<String, SutrCustomType> sutrCustomTypeKeys;
-        private Map<String, SutrLiteralType> sutrLiteralTypeKeys;
+        public Map<String, SutrCustomType> sutrCustomTypeKeys;
+        public Map<String, SutrLiteralType> sutrLiteralTypeKeys;
 
-        BuildSutrDefinitions(final List<SutrFile> sutrFiles) {
+        public BuildSutrDefinitions(final List<SutrFile> sutrFiles) {
             this.sutrFiles = sutrFiles;
         }
 
-        List<SutrObject> getSutrObjectList() {
+        public List<SutrObject> getSutrObjectList() {
             return sutrObjectList;
         }
 
@@ -305,7 +319,7 @@ class SutrGenerator {
             return sutrLiteralTypeKeys;
         }
 
-        BuildSutrDefinitions invoke() throws SutrGeneratorException {
+        public BuildSutrDefinitions invoke() throws SutrGeneratorException {
             sutrObjectList = new ArrayList<>();
             sutrCustomTypeKeys = new HashMap<>();
             sutrLiteralTypeKeys = new HashMap<>();

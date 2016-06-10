@@ -20,7 +20,7 @@
     tokens=[
         DEF='def'
         LITERAL='literal'
-        TYPE='type'
+        TYPE='slotType'
         COMMENT='regexp:#[^\r\n]*'
 //        WORD='regexp:\w+'
 //        UTTERANCE_PART='regexp:[\w\ ]+'
@@ -40,14 +40,14 @@
 
 sutrFile ::= item_*
 private item_ ::= (custom_type|literal_type|sutr_object|import_stmt|COMMENT) {recoverWhile="top_level_recover"}
-private top_level_recover ::= !('def' | 'type' | 'literal' | 'from')
+private top_level_recover ::= !('def' | 'slotType' | 'literal' | 'from')
 
 import_stmt ::= 'from' file_name IMPORT type_name
 {methods=[getTypeReferences resolveReference]}
 
 file_name ::= NAME
 
-custom_type ::= 'type' type_name custom_type_items
+custom_type ::= 'slotType' type_name custom_type_items
 {extends="com.slalom.aws.avs.sutr.psi.impl.SutrReferenceImpl" implements="com.slalom.aws.avs.sutr.psi.SutrTypeDefinitionReference" }
 
 custom_type_items ::= LS custom_type_item (',' custom_type_item)* RS {pin=1}

@@ -5,11 +5,19 @@ package com.slalom.aws.avs.sutr.models;
  */
 public class Slot {
 
+    private final String defaultValue;
+    public boolean isFirst;
+
     public Slot(String name, String type){
-        this.name = name;
-        this.type = type;
+        this(name, type, "");
     }
 
     public String name;
     public String type;
+
+    public Slot(String name, String typeName, String defaultValue) {
+        this.name = name;
+        this.type = typeName;
+        this.defaultValue = defaultValue;
+    }
 }

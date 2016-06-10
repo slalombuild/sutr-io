@@ -56,7 +56,7 @@ class SutrSyntaxHighlighter extends SyntaxHighlighterBase {
     @NotNull
     @Override
     public TextAttributesKey[] getTokenHighlights(IElementType tokenType) {
-        log.info("getTokenHighlights determining token type. [" + tokenType.toString() + "]");
+        log.info("getTokenHighlights determining token slotType. [" + tokenType.toString() + "]");
 
         if (tokenType.equals(SutrTypes.SutrCOMMENT)) {
             return COMMENT_KEYS;

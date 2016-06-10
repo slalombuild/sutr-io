@@ -44,7 +44,7 @@ public class SutrConfigPanel implements Configurable {
     @Override
     public JComponent createComponent() {
 
-        _properties = SutrPluginUtil.getConfig();
+        _properties = SutrPluginUtil.getConfigProvider();
 
 //        handlerTemplateLocationBrowseButton.setText(_properties.handlerTemplateLocation);
         handlerLanguageComboBox.addActionListener(e -> {
@@ -73,9 +73,9 @@ public class SutrConfigPanel implements Configurable {
 
 //        handlerTemplateLocationBrowseButton.addBrowseFolderListener("Handler Template File", "Select handler template file", project, fileDescriptor);
 
-        AddFileSelectorHandler(handlerOutputLocationBrowseButton, project, "Handler Output File", "Provide the path and file name where handler output should be saved.");
-        AddFileSelectorHandler(intentOutputLocationBrowseButton, project, "Intent Output File", "Provide the path and file name where the intent.json should be saved.");
-        AddFileSelectorHandler(utterancesOutputLocationBrowseButton, project, "Utterances Location", "Provide the path and file name where utterances should be saved.");
+        AddFileSelectorHandler(handlerOutputLocationBrowseButton, project, "Handler Output File", "Provide the path and file slotName where handler output should be saved.");
+        AddFileSelectorHandler(intentOutputLocationBrowseButton, project, "SutrIntentModel Output File", "Provide the path and file slotName where the intentName.json should be saved.");
+        AddFileSelectorHandler(utterancesOutputLocationBrowseButton, project, "Utterances Location", "Provide the path and file slotName where utterances should be saved.");
 
     }
 

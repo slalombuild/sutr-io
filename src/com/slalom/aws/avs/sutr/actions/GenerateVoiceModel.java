@@ -29,7 +29,7 @@ public class GenerateVoiceModel extends SutrAction {
         if (project == null || sutrFiles.isEmpty()) return;
 
         try {
-            SutrConfig sutrConfig = SutrPluginUtil.getConfig();
+            SutrConfig sutrConfig = SutrPluginUtil.getConfigProvider();
 
             final StringBuilder buildIntent = SutrGenerator.buildIntent(sutrFiles);
             final StringBuilder buildUtterances = SutrGenerator.buildUtterances(sutrFiles);

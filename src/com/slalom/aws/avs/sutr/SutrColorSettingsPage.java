@@ -94,7 +94,7 @@ public class SutrColorSettingsPage implements ColorSettingsPage {
 
         return "<c># This is a comment</c>\n" +
                 "\n" +
-                "<kw>type</kw> <t>My_Custom_Type</t> [\n" +
+                "<kw>slotType</kw> <t>My_Custom_Type</t> [\n" +
                 "    <ctv>Jump</ctv>,\n" +
                 "    <ctv>Run</ctv>,\n" +
                 "    <ctv>Walk</ctv>,\n" +

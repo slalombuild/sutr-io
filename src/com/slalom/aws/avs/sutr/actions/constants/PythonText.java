@@ -7,16 +7,16 @@ public class PythonText {
 
     public static String OnIntentPreamble =
             "\ndef on_intent(intent_request, session):\n" +
-            "    \"\"\" Called when the user specifies an intent for this skill \"\"\"\n" +
+            "    \"\"\" Called when the user specifies an intentName for this skill \"\"\"\n" +
             "\n" +
             "    print(\"on_intent requestId=\" + intent_request['requestId'] +\n" +
             "          \", sessionId=\" + session['sessionId'])\n" +
             "\n" +
-            "    intent_name = intent_request['intent']['name']\n" +
-            "    intent = intent_request['intent']\n" +
+            "    intent_name = intent_request['intentName']['slotName']\n" +
+            "    intentName = intent_request['intentName']\n" +
             "\n" +
-            "    if 'slots' not in intent:\n" +
-            "        intent['slots'] = dict()\n" +
+            "    if 'slots' not in intentName:\n" +
+            "        intentName['slots'] = dict()\n" +
             "\n"
             ;
 
@@ -24,7 +24,7 @@ public class PythonText {
 
     public static String GeneratorPreamble = "\"\"\"\n" +
             "This sample demonstrates a simple skill built with the Amazon Alexa Skills Kit.\n" +
-            "The Intent Schema, Custom Slots, and Sample Utterances for this skill, as well\n" +
+            "The SutrIntentModel Schema, Custom Slots, and Sample Utterances for this skill, as well\n" +
             "as testing instructions are located at http://amzn.to/1LzFrj6\n" +
             "\n" +
             "For additional samples, visit the Alexa Skills Kit Getting Started guide at\n" +
@@ -34,7 +34,7 @@ public class PythonText {
             "from __future__ import print_function\n" +
             "\n" +
             "def lambda_handler(event, context):\n" +
-            "    \"\"\" Route the incoming request based on type (LaunchRequest, IntentRequest,\n" +
+            "    \"\"\" Route the incoming request based on slotType (LaunchRequest, IntentRequest,\n" +
             "    etc.) The JSON body of the request is provided in the event parameter.\n" +
             "    \"\"\"\n" +
             "    print(\"event.session.application.applicationId=\" +\n" +
@@ -43,7 +43,7 @@ public class PythonText {
             "    \"\"\"\n" +
             "    Uncomment this if statement and populate with your skill's application ID to\n" +
             "    prevent someone else from configuring a skill that sends requests to this\n" +
-            "    function.\n" +
+            "    functionName.\n" +
             "    \"\"\"\n" +
             "    # if (event['session']['application']['applicationId'] !=\n" +
             "    #         \"amzn1.echo-sdk-ams.app.[unique-value-here]\"):\n" +
@@ -53,11 +53,11 @@ public class PythonText {
             "        on_session_started({'requestId': event['request']['requestId']},\n" +
             "                           event['session'])\n" +
             "\n" +
-            "    if event['request']['type'] == \"LaunchRequest\":\n" +
+            "    if event['request']['slotType'] == \"LaunchRequest\":\n" +
             "        return on_launch(event['request'], event['session'])\n" +
-            "    elif event['request']['type'] == \"IntentRequest\":\n" +
+            "    elif event['request']['slotType'] == \"IntentRequest\":\n" +
             "        return on_intent(event['request'], event['session'])\n" +
-            "    elif event['request']['type'] == \"SessionEndedRequest\":\n" +
+            "    elif event['request']['slotType'] == \"SessionEndedRequest\":\n" +
             "        return on_session_ended(event['request'], event['session'])\n" +
             "\n" +
             "\n" +
@@ -115,17 +115,17 @@ public class PythonText {
             "def build_speechlet_response(title, output, reprompt_text, should_end_session):\n" +
             "    return {\n" +
             "        'outputSpeech': {\n" +
-            "            'type': 'PlainText',\n" +
+            "            'slotType': 'PlainText',\n" +
             "            'text': output\n" +
             "        },\n" +
             "        'card': {\n" +
-            "            'type': 'Simple',\n" +
+            "            'slotType': 'Simple',\n" +
             "            'title': 'SessionSpeechlet - ' + title,\n" +
             "            'content': 'SessionSpeechlet - ' + output\n" +
             "        },\n" +
             "        'reprompt': {\n" +
             "            'outputSpeech': {\n" +
-            "                'type': 'PlainText',\n" +
+            "                'slotType': 'PlainText',\n" +
             "                'text': reprompt_text\n" +
             "            }\n" +
             "        },\n" +

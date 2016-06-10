@@ -27,7 +27,7 @@ public class CopyIntentJson extends SutrAction {
         try {
             StringBuilder result = SutrGenerator.buildIntent(sutrFiles);
             CopyPasteManager.getInstance().setContents(new StringSelection(result.toString()));
-            ActionUtil.ShowInfoMessage("Sutr Intent definition copied to clipboard", e);
+            ActionUtil.ShowInfoMessage("Sutr SutrIntentModel definition copied to clipboard", e);
         } catch (SutrGeneratorException e1) {
             ActionUtil.ShowErrorMessage(e1.getMessage(), e);
         }

@@ -20,7 +20,7 @@ import java.util.List;
  */
 public class SutrElementFactory {
     public static SutrTypeNameImpl createTypeNameElement(final Project project, final String s) {
-        final PsiFile dummyFile = createDummyFile(project, "type " + s + "[ foo ]");
+        final PsiFile dummyFile = createDummyFile(project, "slotType " + s + "[ foo ]");
 
         return (SutrTypeNameImpl) ((SutrCustomTypeImpl) dummyFile.getFirstChild()).getTypeName();
     }

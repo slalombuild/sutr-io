@@ -24,7 +24,7 @@ public class CopyCustomType extends SutrAction {
     public void actionPerformed(AnActionEvent e) {
         SutrCustomType customType = ActionUtil.getCustomTypeUnderCaret(e);
         if (customType == null) {
-            ActionUtil.ShowErrorMessage("No type name found.", e);
+            ActionUtil.ShowErrorMessage("No slotType slotName found.", e);
             return;
         }
 

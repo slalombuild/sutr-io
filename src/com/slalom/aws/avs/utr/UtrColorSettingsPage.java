@@ -14,7 +14,7 @@ import java.util.Map;
 
 public class UtrColorSettingsPage implements ColorSettingsPage {
     public static final AttributesDescriptor[] DESCRIPTORS = new AttributesDescriptor[]{
-            new AttributesDescriptor("Intent", UtrSyntaxHighlighter.INTENT),
+            new AttributesDescriptor("SutrIntentModel", UtrSyntaxHighlighter.INTENT),
             new AttributesDescriptor("Utterance", UtrSyntaxHighlighter.WORD),
             new AttributesDescriptor("Slot", UtrSyntaxHighlighter.SLOT),
             new AttributesDescriptor("Slot Phrase", UtrSyntaxHighlighter.LITERAL_PHRASE),
@@ -44,7 +44,7 @@ public class UtrColorSettingsPage implements ColorSettingsPage {
     @NotNull
     @Override
     public String getDemoText() {
-            return "<i>My Intent</i> <u>This is the utterance with a</u> <s>{Action}</s> <u>and</u> <s>{<sp>literal phrase</sp> | MyLiteral} </s>";
+            return "<i>My SutrIntentModel</i> <u>This is the utterance with a</u> <s>{Action}</s> <u>and</u> <s>{<sp>literal phrase</sp> | MyLiteral} </s>";
 
 
     }

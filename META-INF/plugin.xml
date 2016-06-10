@@ -26,6 +26,8 @@
   -->
   <depends>com.intellij.modules.lang</depends>
   <!--<depends>com.github.spullara.mustache.java</depends>-->
+
+
   <extensions defaultExtensionNs="com.intellij">
     <applicationConfigurable instance="com.slalom.aws.avs.sutr.conf.SutrConfigPanel"/>
     <fileTypeFactory implementation="com.slalom.aws.avs.sutr.SutrFileTypeFactory" />
@@ -79,6 +81,11 @@
             description="Generates the voice model for the ASK">
       <add-to-group group-id="sutr.action.group" anchor="first"/>
       <keyboard-shortcut keymap="$default" first-keystroke="shift ctrl G"/>
+    </action>
+    <action id="com.slalom.aws.avs.sutr.actions.exceptions.GenerateHandler"
+            class="com.slalom.aws.avs.sutr.actions.exceptions.GenerateHandler" text="Generate Handler"
+            description="Generates the Handler Code">
+      <add-to-group group-id="sutr.action.group" anchor="last"/>
     </action>
   </actions>
 
