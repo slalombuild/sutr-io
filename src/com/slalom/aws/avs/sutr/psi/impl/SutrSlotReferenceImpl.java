@@ -61,7 +61,7 @@ public class SutrSlotReferenceImpl extends SutrReferenceImpl implements PsiScope
     public PsiElement resolve() {
         SutrObject thisSutrObject = getParentSutr();
 
-        for (final SutrParam sutrParam : thisSutrObject.getSutrParams().getSutrParamList()) {
+        for (final SutrParam sutrParam : thisSutrObject.getSutrParams().getParamList()) {
             if (sutrParam.getParamName().getText().equals(this.getCanonicalText())) {
                 return sutrParam.getParamName();
             }
@@ -127,7 +127,7 @@ public class SutrSlotReferenceImpl extends SutrReferenceImpl implements PsiScope
     @Override
     public Object[] getVariants() {
         List<Object> variants = new ArrayList<>();
-        final List<SutrParam> sutrParamList = this.getParentSutr().getSutrParams().getSutrParamList();
+        final List<SutrParam> sutrParamList = this.getParentSutr().getSutrParams().getParamList();
 
         for (final SutrParam sutrParam : sutrParamList) {
             if(notInUtterance(sutrParam)){

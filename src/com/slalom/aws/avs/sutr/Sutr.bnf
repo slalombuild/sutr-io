@@ -39,7 +39,7 @@
 }
 
 sutrFile ::= item_*
-private item_ ::= (custom_type|literal_type|sutr_object|import_stmt|COMMENT) {recoverWhile="top_level_recover"}
+private item_ ::= (custom_type|literal_type|object|import_stmt|COMMENT) {recoverWhile="top_level_recover"}
 private top_level_recover ::= !('def' | 'slotType' | 'literal' | 'from')
 
 import_stmt ::= 'from' file_name IMPORT type_name
@@ -59,12 +59,12 @@ literal_type ::= 'literal' type_name literal_phrases
 literal_phrases ::= LS literal_phrase (',' literal_phrase )* RS {pin=1}
 literal_phrase ::= (NAME|WORD)*
 
-sutr_object ::= 'def' sutr_name sutr_params sutr_body function_pointer {pin=3}
+object ::= 'def' sutr_name sutr_params body function_pointer {pin=3}
 
-sutr_params ::= '(' sutr_param (',' sutr_param)* ')' | '(' sutr_param? ')'
-sutr_param ::= type_name param_name {methods=[getParentSutr getDefaultValue]}
+sutr_params ::= '(' param (',' param)* ')' | '(' param? ')'
+param ::= type_name param_name {methods=[getParentSutr getDefaultValue]}
 
-sutr_body ::= '{' (utterance|EOL|LINE_WS)* '}'
+body ::= '{' (utterance|EOL|LINE_WS)* '}'
 utterance ::= ( utterance_part | slot)+ EOL
 utterance_part ::= (NAME | WORD)+
 

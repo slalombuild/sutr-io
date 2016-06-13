@@ -41,7 +41,7 @@ public class SutrAnnotator implements Annotator {
             validateFunctionName(psiElement, annotationHolder);
         } else if (tokenType.equals(SutrTypes.SutrUTTERANCE_PART)) {
             validateUtterancePart(psiElement, annotationHolder);
-        } else if (tokenType.equals(SutrTypes.SutrSUTR_PARAM)) {
+        } else if (tokenType.equals(SutrTypes.SutrPARAM)) {
             validateSutrParamPart(psiElement, annotationHolder);
         }
     }
@@ -131,7 +131,7 @@ public class SutrAnnotator implements Annotator {
     private boolean hasParam(final @NotNull PsiElement psiElement) {
         final SutrObject parent = ((SutrSlotImpl) psiElement.getParent()).getParentSutr();
 
-        for (final SutrParam sutrSutrParam : parent.getSutrParams().getSutrParamList()) {
+        for (final SutrParam sutrSutrParam : parent.getSutrParams().getParamList()) {
             if (((SutrSlotImpl) psiElement.getParent()).isReferenceTo(sutrSutrParam.getParamName())) {
                 return true;
             }

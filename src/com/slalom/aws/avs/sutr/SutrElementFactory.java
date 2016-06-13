@@ -39,7 +39,7 @@ public class SutrElementFactory {
         final String text = "def Foo(){\n {"+s+"}\n} => foo.func";
         final PsiFile dummyFile = createDummyFile(project, text);
 
-        final SutrBody sutrBody = ((SutrObject) dummyFile.getFirstChild()).getSutrBody();
+        final SutrBody sutrBody = ((SutrObject) dummyFile.getFirstChild()).getBody();
         final List<SutrUtterance> utteranceList = sutrBody.getUtteranceList();
 
         return (SutrSlotImpl) utteranceList.get(0).getSlotList().get(0);
@@ -50,6 +50,6 @@ public class SutrElementFactory {
         final PsiFile dummyFile = createDummyFile(project, text);
         final SutrObject sutrObject = ((SutrObject) dummyFile.getFirstChild());
 
-        return sutrObject.getSutrParams().getSutrParamList().get(0).getParamName();
+        return sutrObject.getSutrParams().getParamList().get(0).getParamName();
     }
 }

@@ -50,7 +50,7 @@ public class SutrGenerator {
 
             List<SutrSlotModel> slots = new ArrayList<>();
 
-            List<SutrParam> sutrParamList = sutrDef.getSutrParams().getSutrParamList();
+            List<SutrParam> sutrParamList = sutrDef.getSutrParams().getParamList();
             for (int i = 0; i < sutrParamList.size(); i++) {
                 SutrParam param = sutrParamList.get(i);
                 String typeName = param.getTypeName().getText();
@@ -103,7 +103,7 @@ public class SutrGenerator {
 
             String utteranceName = sutrObject.getSutrName().getText();
 
-            final SutrBody sutrBody = sutrObject.getSutrBody();
+            final SutrBody sutrBody = sutrObject.getBody();
 
             if (sutrBody != null) {
                 for (SutrUtterance utterance : sutrBody.getUtteranceList()) {
@@ -231,7 +231,7 @@ public class SutrGenerator {
             StringBuilder paramBuilder = new StringBuilder("intentName, session");
             StringBuilder defaultParamValueBuilder = new StringBuilder();
 
-            for (final SutrParam sutrSutrParam : sutr.getSutrParams().getSutrParamList()) {
+            for (final SutrParam sutrSutrParam : sutr.getSutrParams().getParamList()) {
                 final String paramName = sutrSutrParam.getParamName().getText();
 
                 final String defaultValue = sutrSutrParam.getDefaultValue();

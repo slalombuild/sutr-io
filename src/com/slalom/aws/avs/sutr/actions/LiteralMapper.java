@@ -28,7 +28,7 @@ public class LiteralMapper {
     }
 
     public List<String> Map(SutrUtterance utterance, SutrObject sutrObject) {
-        final List<SutrParam> sutrParamList = sutrObject.getSutrParams().getSutrParamList();
+        final List<SutrParam> sutrParamList = sutrObject.getSutrParams().getParamList();
 
         List<String> utteranceVariations = new ArrayList<>();
 
