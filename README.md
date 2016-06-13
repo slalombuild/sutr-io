@@ -1,3 +1,21 @@
+# Development setup
+
+## Intellij
+* Plugins required:
+    * Grammar-Kit
+    * Psi-viewer (recommended)
+* Update sutr-io.iml module type to 'PLUGIN_MODULE'
+* Add Library dependency on com.github.spullara.mustache.java:compiler:0.9.1
+* Update project structure
+    * Mark src/resource as a Resource folder
+    * Mark src as a Sources folder
+    * Mark gen folder as Sources root
+    * Modules <sutr-io> -> Paths -> Use Module compile output path
+    * Plugin deployment ->Path to META-INF/plugin.xml -> (project root directory)
+* Generate psi structure from bnf (both sutr and utr)
+* Generate .flex Lexer.
+
+
 # Sutr Overview
 
 Installation: Open your Jetbrains IDE (IntelliJ, Webstorm, Pycharm, etc...) and go to Plugins -> Browse Repositories and search for 'Sutr'  
