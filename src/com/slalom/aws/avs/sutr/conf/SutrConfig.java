@@ -11,27 +11,28 @@ import java.util.List;
  */
 public class SutrConfig {
 
-    @PropertyName(value="sutr.templates")
-    public List<String> templateLocations;
-
-    @PropertyName(value = "sutr.handlerTemplateFileLocation")
-    public String handlerTemplateLocation;
-
-    @PropertyName(value = "sutr.handlerOutputLocation")
-    public String handlerOutputLocation;
-
-    @PropertyName(value = "sutr.intentOutputLocation")
-    public String intentOutputLocation;
-
-    @PropertyName(value = "sutr.utterancesOutputLocation")
-    public String utterancesOutputLocation;
-
     @PropertyName(value="sutr.useCustomPaths", defaultValue = "false")
     public boolean useCustomPaths;
 
-    @PropertyName(value="sutr.selecteHandlerTemplate")
-    public String selecteHandlerTemplate;
-    private String handlerTemplate;
+    @PropertyName(value="sutr.templates")
+    public List<String> templatePaths;
 
+    @PropertyName(value = "sutr.handlerTemplateFilePath")
+    public String handlerTemplatePath;
+
+    @PropertyName(value = "sutr.handlerOutputPath")
+    public String handlerOutputPath;
+
+    @PropertyName(value = "sutr.intentOutputPath")
+    public String intentOutputPath;
+
+    @PropertyName(value = "sutr.utterancesOutputPath")
+    public String utterancesOutputPath;
+
+    @PropertyName(value = "sutr.customTypesOutputPath")
+    public String customTypesOutputPath;
+
+    @PropertyName(value="sutr.selectedHandlerTemplate")
+    public String selectedHandlerTemplate;
 
 }

@@ -17,6 +17,7 @@ public class SutrConfigProvider {
     public static final String DEFAULT_HANDLER_OUTPUT_PATH = PROJECT_ROOT_TOKEN + "/ask/";
     private static final String DEFAULT_INTENT_OUTPUT_PATH = "$PROJECT_ROOT$/ask/intentName.json";
     private static final String DEFAULT_UTTERANCE_OUTPUT_PATH = "$PROJECT_ROOT$/ask/skill.utr";
+    private static final String DEFAULT_CUSTOM_TYPES_OUTPUT_PATH = "$PROJECT_ROOT$/ask/custom.types";
     public static final String DEFAULT_PYTHON_TEMPLATE_PATH = "<Default Python>";
     public static final String DEFAULT_JAVASCRIPT_TEMPLATE_PATH = "<Default Javascript>";
 
@@ -28,11 +29,7 @@ public class SutrConfigProvider {
 
         _project = project;
 
-        config = new SutrConfig();
-
-        PropertiesComponent comp = PropertiesComponent.getInstance(project);
-
-        comp.loadFields(config);
+        reset();
     }
 
     public void apply() {
@@ -43,8 +40,20 @@ public class SutrConfigProvider {
 
     }
 
+    public void reset(){
+        config = new SutrConfig();
+
+        PropertiesComponent comp = PropertiesComponent.getInstance(_project);
+
+        comp.loadFields(config);
+    }
+
     public void useCustomPaths(boolean useCustomPaths) {
         config.useCustomPaths = useCustomPaths;
+        SetOutputPaths(useCustomPaths);
+    }
+
+    private void SetOutputPaths(boolean useCustomPaths) {
     }
 
     public boolean useCustomPaths() {
@@ -52,26 +61,27 @@ public class SutrConfigProvider {
     }
 
     public List<String> getHandlerTemplateLocations(){
+
         List<String> locations = new ArrayList<>();
         locations.add(DEFAULT_PYTHON_TEMPLATE_PATH);
         locations.add(DEFAULT_JAVASCRIPT_TEMPLATE_PATH);
 
-        if(config.templateLocations != null){
-            locations.addAll(config.templateLocations);
+        if(config.templatePaths != null){
+            locations.addAll(config.templatePaths);
         }
 
         return locations;
     }
 
     public String getCurrentHandlerTemplatePath() {
-        if(config.selecteHandlerTemplate == null){
-            config.selecteHandlerTemplate = DEFAULT_PYTHON_TEMPLATE_PATH;
+        if(config.selectedHandlerTemplate == null){
+            config.selectedHandlerTemplate = DEFAULT_PYTHON_TEMPLATE_PATH;
         }
-        return config.selecteHandlerTemplate;
+        return config.selectedHandlerTemplate;
     }
 
     public void setCurrentHandlerTemplatePath(String handlerTemplatePath) {
-        config.selecteHandlerTemplate = handlerTemplatePath;
+        config.selectedHandlerTemplate = handlerTemplatePath;
     }
 
     public String getHandlerOutputLocation() {
@@ -88,7 +98,7 @@ public class SutrConfigProvider {
 
             return FormatProjectPath(DEFAULT_HANDLER_OUTPUT_PATH + filename);
         }
-        return config.handlerOutputLocation;
+        return config.handlerOutputPath;
     }
 
     private String FormatProjectPath(String path) {
@@ -100,25 +110,30 @@ public class SutrConfigProvider {
     }
 
     public void setHandlerOutputLocation(String handlerOutputLocation) {
-        config.handlerOutputLocation = handlerOutputLocation;
+        config.handlerOutputPath = handlerOutputLocation;
     }
 
     public String getIntentOutputLocation() {
-        if(useCustomPaths()){
-            return FormatProjectPath(DEFAULT_INTENT_OUTPUT_PATH);
-        }
-        return config.intentOutputLocation;
+        return !useCustomPaths() ? FormatProjectPath(DEFAULT_INTENT_OUTPUT_PATH) : config.intentOutputPath;
     }
 
     public void setIntentOutputLocation(String intentOutputLocation) {
-        this.config.intentOutputLocation = intentOutputLocation;
+        this.config.intentOutputPath = intentOutputLocation;
     }
 
     public String getUtterancesOutputLocation() {
-        return useCustomPaths() ? FormatProjectPath(DEFAULT_UTTERANCE_OUTPUT_PATH): config.utterancesOutputLocation;
+        return !useCustomPaths() ? FormatProjectPath(DEFAULT_UTTERANCE_OUTPUT_PATH): config.utterancesOutputPath;
     }
 
     public void setUtterancesOutputLocation(String utterancesOutputLocation) {
-        config.utterancesOutputLocation = utterancesOutputLocation;
+        config.utterancesOutputPath = utterancesOutputLocation;
+    }
+
+    public String getCustomTypesOutputLocation() {
+        return !useCustomPaths() ? FormatProjectPath(DEFAULT_CUSTOM_TYPES_OUTPUT_PATH): config.customTypesOutputPath;
+    }
+
+    public void setCustomTypesOutputLocation(String customTypesOutputLocation) {
+        config.customTypesOutputPath = customTypesOutputLocation;
     }
 }

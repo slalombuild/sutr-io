@@ -34,9 +34,10 @@ public class SutrConfigPanel implements Configurable {
     private JCheckBox useCustomOutputPathsCheckBox;
     private JLabel handlerOutputFileLabel;
     private JLabel utterancesOutputFileLabel;
+    private JLabel customTypesOutputFileLabel;
     private JLabel intentOutputFileLabel;
     private ComboboxWithBrowseButton handlerTemplateComboBox;
-    private JLabel sutrErrorLabel;
+    private TextFieldWithBrowseButton customTypesOutputLocationBrowseButton;
 
     private SutrConfigProvider configProvider;
 
@@ -46,21 +47,23 @@ public class SutrConfigPanel implements Configurable {
 
         configProvider = SutrPluginUtil.getConfigProvider();
 
+        SetupValues(configProvider);
+        SetupComponents(SutrPluginUtil.getProject());
+
+        return myPanel;
+    }
+
+    private void SetupComponents(Project project) {
 //        handlerTemplateComboBox.getComboBox()(configProvider.getCurrentHandlerTemplatePath());
         handlerTemplateComboBox.setButtonEnabled(true);
+        handlerTemplateComboBox.getComboBox().setEditable(false);
 
-        handlerTemplateComboBox.getComboBox().setEditable(true);
-
-        for (String path : configProvider.getHandlerTemplateLocations()) {
-
-            handlerTemplateComboBox.getComboBox().addItem(path);
-
-        }
-
-        handlerTemplateComboBox.addActionListener(e -> {
-//            String handlerTemplateLocation = ((JComboBox) e.getSource()).getSelectedItem().toString();
-//            configProvider.setCurrentHandlerTemplatePath(handlerTemplateLocation);
+        handlerTemplateComboBox.getComboBox().addActionListener(e -> {
+            String handlerTemplateLocation = ((JComboBox) e.getSource()).getSelectedItem().toString();
+            configProvider.setCurrentHandlerTemplatePath(handlerTemplateLocation);
+            EnableCustomPaths(useCustomOutputPathsCheckBox.isSelected());
         });
+
 
         useCustomOutputPathsCheckBox.setSelected(configProvider.useCustomPaths());
 //        handlerTemplateComboBox.setSelectedItem(configProvider.getCurrentHandlerTemplatePath());
@@ -70,21 +73,21 @@ public class SutrConfigPanel implements Configurable {
             EnableCustomPaths(isSelected);
         });
 
-        AddBrowserHandlers(SutrPluginUtil.getProject());
-
-        EnableCustomPaths(useCustomOutputPathsCheckBox.isSelected());
-
-        return myPanel;
-    }
-
-    private void AddBrowserHandlers(Project project) {
         FileChooserDescriptor fileDescriptor = FileChooserDescriptorFactory.createSingleFileDescriptor();
         handlerTemplateComboBox.addBrowseFolderListener(project, fileDescriptor);
 
-        AddFileSelectorHandler(handlerOutputLocationBrowseButton, project, "Handler Output File", "Provide the path and file slotName where handler output should be saved.");
-        AddFileSelectorHandler(intentOutputLocationBrowseButton, project, "SutrIntentModel Output File", "Provide the path and file slotName where the intentName.json should be saved.");
-        AddFileSelectorHandler(utterancesOutputLocationBrowseButton, project, "Utterances Location", "Provide the path and file slotName where utterances should be saved.");
+        AddFileSelectorHandler(handlerOutputLocationBrowseButton, project, "Handler Output File", "Provide the path where handler output should be saved.");
+        AddFileSelectorHandler(intentOutputLocationBrowseButton, project, "SutrIntentModel Output File", "Provide the path where the intentName.json file should be saved.");
+        AddFileSelectorHandler(utterancesOutputLocationBrowseButton, project, "Utterances Location", "Provide the path where the utterances file should be saved.");
+        AddFileSelectorHandler(customTypesOutputLocationBrowseButton, project, "Custom Types Location", "Provide the path where custom types file should be saved.");
+    }
 
+    private void SetupValues(SutrConfigProvider configProvider) {
+        for (String path : configProvider.getHandlerTemplateLocations()) {
+
+        }
+
+        EnableCustomPaths(useCustomOutputPathsCheckBox.isSelected());
     }
 
     private void AddFileSelectorHandler(TextFieldWithBrowseButton textFieldWithBrowseButton, Project project, String label, String description) {
@@ -122,11 +125,14 @@ public class SutrConfigPanel implements Configurable {
         handlerOutputFileLabel.setEnabled(isEnabled);
         intentOutputFileLabel.setEnabled(isEnabled);
         utterancesOutputFileLabel.setEnabled(isEnabled);
-        configProvider.useCustomPaths(isEnabled);
+        customTypesOutputFileLabel.setEnabled(isEnabled);
 
+
+        configProvider.useCustomPaths(isEnabled);
         handlerOutputLocationBrowseButton.setText(configProvider.getHandlerOutputLocation());
         intentOutputLocationBrowseButton.setText(configProvider.getIntentOutputLocation());
         utterancesOutputLocationBrowseButton.setText(configProvider.getUtterancesOutputLocation());
+        customTypesOutputLocationBrowseButton.setText(configProvider.getCustomTypesOutputLocation());
 
     }
 
@@ -149,10 +155,10 @@ public class SutrConfigPanel implements Configurable {
 
     @Override
     public void apply() throws ConfigurationException {
-//
 
         String _handlerOutputLocation = handlerOutputLocationBrowseButton.getText();
         String _utterancesOutputLocation = utterancesOutputLocationBrowseButton.getText();
+        String _customTypesOutputLocation = customTypesOutputLocationBrowseButton.getText();
         String _intentOutputLocation = intentOutputLocationBrowseButton.getText();
         String _handlerLanguage = (String) handlerTemplateComboBox.getComboBox().getSelectedItem();
         Boolean _useDefaultPaths = useCustomOutputPathsCheckBox.isSelected();
@@ -161,6 +167,7 @@ public class SutrConfigPanel implements Configurable {
 //                || !_handlerTemplateLocation.equals(configProvider.handlerTemplateLocation)
                 || !_intentOutputLocation.equals(configProvider.getIntentOutputLocation())
                 || !_utterancesOutputLocation.equals(configProvider.getUtterancesOutputLocation())
+                || !_customTypesOutputLocation.equals(configProvider.getCustomTypesOutputLocation())
                 || !_handlerLanguage.equals(configProvider.getCurrentHandlerTemplatePath())
                 || _useDefaultPaths != configProvider.useCustomPaths();
 
@@ -169,6 +176,7 @@ public class SutrConfigPanel implements Configurable {
 //            configProvider.handlerTemplateLocation = _handlerTemplateLocation;
             configProvider.setHandlerOutputLocation(_handlerOutputLocation);
             configProvider.setUtterancesOutputLocation(_utterancesOutputLocation);
+            configProvider.setCustomTypesOutputLocation(_customTypesOutputLocation);
             configProvider.setIntentOutputLocation(_intentOutputLocation);
             configProvider.setCurrentHandlerTemplatePath( _handlerLanguage);
             configProvider.useCustomPaths(_useDefaultPaths);
