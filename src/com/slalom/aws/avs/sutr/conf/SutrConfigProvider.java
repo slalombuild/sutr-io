@@ -9,7 +9,7 @@ import java.util.List;
 
 /**
  * Created by stryderc on 6/7/2016.
- *
+ * <p>
  * Properties that are used by the Sutr.io plugin.
  */
 public class SutrConfigProvider {
@@ -35,7 +35,29 @@ public class SutrConfigProvider {
 
         PropertiesComponent comp = PropertiesComponent.getInstance(_project);
         comp.loadFields(config);
+
+        CleanupConfig(config);
+
         _configCopy = new SutrConfig(config);
+    }
+
+    private void CleanupConfig(SutrConfig config) {
+        if (IsNull(config.handlerOutputPath)) {
+            config.handlerOutputPath = getDefaultHandlerOutputPath();
+        }
+        if (IsNull(config.utterancesOutputPath)) {
+            config.utterancesOutputPath = getDefaultUtteranceOutputPath();
+        }
+        if (IsNull(config.intentOutputPath)) {
+            config.intentOutputPath = getDefaultIntentOutputPath();
+        }
+        if (IsNull(config.customTypesOutputPath)) {
+            config.customTypesOutputPath = getDefaultCustomTypesOutputPath();
+        }
+    }
+
+    private boolean IsNull(String value) {
+        return (value == null || value.equals("null"));
     }
 
     public void apply() {
@@ -46,7 +68,7 @@ public class SutrConfigProvider {
 
     }
 
-    public void reset(){
+    public void reset() {
         config = new SutrConfig(_configCopy);
     }
 
@@ -58,13 +80,13 @@ public class SutrConfigProvider {
         return config.useCustomPaths;
     }
 
-    public List<String> getHandlerTemplateLocations(){
+    public List<String> getHandlerTemplateLocations() {
 
         List<String> locations = new ArrayList<>();
         locations.add(DEFAULT_PYTHON_TEMPLATE_PATH);
         locations.add(DEFAULT_JAVASCRIPT_TEMPLATE_PATH);
 
-        if(config.templatePaths != null){
+        if (config.templatePaths != null) {
             locations.addAll(config.templatePaths);
         }
 
@@ -72,7 +94,7 @@ public class SutrConfigProvider {
     }
 
     public String getCurrentHandlerTemplatePath() {
-        if(config.selectedHandlerTemplate == null || config.selectedHandlerTemplate.equals("null")){
+        if (config.selectedHandlerTemplate == null || config.selectedHandlerTemplate.equals("null")) {
             config.selectedHandlerTemplate = DEFAULT_PYTHON_TEMPLATE_PATH;
         }
 
@@ -84,25 +106,82 @@ public class SutrConfigProvider {
     }
 
     public String getHandlerOutputLocation() {
-        if(!config.useCustomPaths){
-            String selectedTemplate = config.selectedHandlerTemplate;
-
-            String filename;
-
-            if(selectedTemplate.equals(DEFAULT_PYTHON_TEMPLATE_PATH)){
-                filename = "ask_handler.py";
-            }
-            else if(selectedTemplate.equals(DEFAULT_JAVASCRIPT_TEMPLATE_PATH)){
-                filename = "askHandler.js";
-            }
-            else{
-                filename = new File(config.selectedHandlerTemplate).getName();
-            }
-
-            return FormatProjectPath(DEFAULT_HANDLER_OUTPUT_PATH + filename);
-        }
-        return config.handlerOutputPath;
+        return !config.useCustomPaths ? getDefaultHandlerOutputPath() : config.handlerOutputPath;
     }
+
+    private String getDefaultHandlerOutputPath() {
+        String selectedTemplate = config.selectedHandlerTemplate;
+
+        String filename;
+
+        if (selectedTemplate.equals(DEFAULT_PYTHON_TEMPLATE_PATH)) {
+            filename = "ask_handler.py";
+        } else if (selectedTemplate.equals(DEFAULT_JAVASCRIPT_TEMPLATE_PATH)) {
+            filename = "askHandler.js";
+        } else {
+            filename = new File(config.selectedHandlerTemplate).getName();
+        }
+
+        return FormatProjectPath(DEFAULT_HANDLER_OUTPUT_PATH + filename);
+    }
+
+    public void setHandlerOutputLocation(String handlerOutputLocation) {
+        if (useCustomPaths()) {
+            config.handlerOutputPath = handlerOutputLocation;
+        }
+    }
+
+    public String getIntentOutputLocation() {
+        return !useCustomPaths() ? getDefaultIntentOutputPath() : config.intentOutputPath;
+    }
+
+    private String getDefaultIntentOutputPath() {
+        return FormatProjectPath(DEFAULT_INTENT_OUTPUT_PATH);
+    }
+
+    public void setIntentOutputLocation(String intentOutputLocation) {
+        if (useCustomPaths()) {this.config.intentOutputPath = intentOutputLocation;}
+    }
+
+    public String getUtterancesOutputLocation() {
+        return !useCustomPaths() ? getDefaultUtteranceOutputPath() : config.utterancesOutputPath;
+    }
+
+    private String getDefaultUtteranceOutputPath() {
+        return FormatProjectPath(DEFAULT_UTTERANCE_OUTPUT_PATH);
+    }
+
+    public void setUtterancesOutputLocation(String utterancesOutputLocation) {
+        if (useCustomPaths()) {config.utterancesOutputPath = utterancesOutputLocation;}
+    }
+
+    public String getCustomTypesOutputLocation() {
+        return !useCustomPaths() ? getDefaultCustomTypesOutputPath() : config.customTypesOutputPath;
+    }
+
+    private String getDefaultCustomTypesOutputPath() {
+        return FormatProjectPath(DEFAULT_CUSTOM_TYPES_OUTPUT_PATH);
+    }
+
+    public void setCustomTypesOutputLocation(String customTypesOutputLocation) {
+        if(useCustomPaths()){ config.customTypesOutputPath = customTypesOutputLocation; }
+    }
+
+    public boolean hasChanged() {
+
+        boolean configHasChanged =
+                config.useCustomPaths != _configCopy.useCustomPaths
+//        || !config.templatePaths = _configCopy.templatePaths
+                        || !config.handlerTemplatePath.equals(_configCopy.handlerTemplatePath)
+                        || !config.handlerOutputPath.equals(_configCopy.handlerOutputPath)
+                        || !config.intentOutputPath.equals(_configCopy.intentOutputPath)
+                        || !config.utterancesOutputPath.equals(_configCopy.utterancesOutputPath)
+                        || !config.customTypesOutputPath.equals(_configCopy.customTypesOutputPath)
+                        || !config.selectedHandlerTemplate.equals(_configCopy.selectedHandlerTemplate);
+
+        return configHasChanged;
+    }
+
 
     private String FormatProjectPath(String path) {
         String basePath = _project.getBasePath();
@@ -112,46 +191,4 @@ public class SutrConfigProvider {
         return path.replace(PROJECT_ROOT_TOKEN, basePath);
     }
 
-    public void setHandlerOutputLocation(String handlerOutputLocation) {
-        config.handlerOutputPath = handlerOutputLocation;
-    }
-
-    public String getIntentOutputLocation() {
-        return !useCustomPaths() ? FormatProjectPath(DEFAULT_INTENT_OUTPUT_PATH) : config.intentOutputPath;
-    }
-
-    public void setIntentOutputLocation(String intentOutputLocation) {
-        this.config.intentOutputPath = intentOutputLocation;
-    }
-
-    public String getUtterancesOutputLocation() {
-        return !useCustomPaths() ? FormatProjectPath(DEFAULT_UTTERANCE_OUTPUT_PATH): config.utterancesOutputPath;
-    }
-
-    public void setUtterancesOutputLocation(String utterancesOutputLocation) {
-        config.utterancesOutputPath = utterancesOutputLocation;
-    }
-
-    public String getCustomTypesOutputLocation() {
-        return !useCustomPaths() ? FormatProjectPath(DEFAULT_CUSTOM_TYPES_OUTPUT_PATH): config.customTypesOutputPath;
-    }
-
-    public void setCustomTypesOutputLocation(String customTypesOutputLocation) {
-        config.customTypesOutputPath = customTypesOutputLocation;
-    }
-
-    public boolean hasChanged() {
-
-        boolean configHasChanged =
-         config.useCustomPaths != _configCopy.useCustomPaths
-//        || !config.templatePaths = _configCopy.templatePaths
-        || !config.handlerTemplatePath.equals(_configCopy.handlerTemplatePath)
-        || !config.handlerOutputPath.equals(_configCopy.handlerOutputPath)
-        || !config.intentOutputPath.equals(_configCopy.intentOutputPath)
-        || !config.utterancesOutputPath.equals(_configCopy.utterancesOutputPath)
-        || !config.customTypesOutputPath.equals(_configCopy.customTypesOutputPath)
-        || !config.selectedHandlerTemplate.equals(_configCopy.selectedHandlerTemplate);
-
-        return configHasChanged;
-    }
 }

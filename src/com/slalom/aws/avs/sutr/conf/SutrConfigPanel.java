@@ -80,6 +80,10 @@ public class SutrConfigPanel implements Configurable {
         AddFileSelectorHandler(customTypesOutputLocationBrowseButton, project, "Custom Types Location", "Provide the path where custom types file should be saved.");
     }
 
+    private void AddDocumentUpdateListener(TextFieldWithBrowseButton handlerOutputLocationBrowseButton, Object o) {
+
+    }
+
     private void SetupValues(SutrConfigProvider configProvider) {
         for (String path : configProvider.getHandlerTemplateLocations()) {
             this.handlerTemplateComboBox.getComboBox().addItem(path);
@@ -88,7 +92,7 @@ public class SutrConfigPanel implements Configurable {
             }
         }
 
-        EnableCustomPaths(useCustomOutputPathsCheckBox.isSelected());
+        EnableCustomPaths(configProvider.useCustomPaths());
     }
 
     private void AddFileSelectorHandler(TextFieldWithBrowseButton textFieldWithBrowseButton, Project project, String label, String description) {
@@ -116,7 +120,12 @@ public class SutrConfigPanel implements Configurable {
 
     private void EnableCustomPaths(boolean isEnabled) {
 
-        for (TextFieldWithBrowseButton c : new TextFieldWithBrowseButton[] {handlerOutputLocationBrowseButton, intentOutputLocationBrowseButton, utterancesOutputLocationBrowseButton}) {
+        for (TextFieldWithBrowseButton c : new TextFieldWithBrowseButton[] {
+                handlerOutputLocationBrowseButton,
+                intentOutputLocationBrowseButton,
+                utterancesOutputLocationBrowseButton,
+                customTypesOutputLocationBrowseButton
+        }) {
 
             c.setEditable(isEnabled);
             c.setEnabled(isEnabled);
@@ -127,7 +136,6 @@ public class SutrConfigPanel implements Configurable {
         intentOutputFileLabel.setEnabled(isEnabled);
         utterancesOutputFileLabel.setEnabled(isEnabled);
         customTypesOutputFileLabel.setEnabled(isEnabled);
-
 
         configProvider.useCustomPaths(isEnabled);
 
@@ -157,6 +165,10 @@ public class SutrConfigPanel implements Configurable {
 
     @Override
     public void apply() throws ConfigurationException {
+        configProvider.setHandlerOutputLocation(handlerOutputLocationBrowseButton.getText());
+        configProvider.setIntentOutputLocation(intentOutputLocationBrowseButton.getText());
+        configProvider.setUtterancesOutputLocation(utterancesOutputLocationBrowseButton.getText());
+        configProvider.setCustomTypesOutputLocation(customTypesOutputLocationBrowseButton.getText());
 
         if (configProvider.hasChanged()) {
 

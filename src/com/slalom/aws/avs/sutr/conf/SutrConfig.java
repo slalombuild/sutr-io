@@ -19,12 +19,29 @@ public class SutrConfig {
         this.useCustomPaths = sutrConfig.useCustomPaths;
         this.templatePaths = sutrConfig.templatePaths;
         this.handlerTemplatePath = sutrConfig.handlerTemplatePath;
+        this.selectedHandlerTemplate = sutrConfig.selectedHandlerTemplate;
         this.handlerOutputPath = sutrConfig.handlerOutputPath;
         this.intentOutputPath = sutrConfig.intentOutputPath;
         this.utterancesOutputPath = sutrConfig.utterancesOutputPath;
         this.customTypesOutputPath = sutrConfig.customTypesOutputPath;
-        this.selectedHandlerTemplate = sutrConfig.selectedHandlerTemplate;
+
+        this.handlerCustomOutputPath = sutrConfig.handlerCustomOutputPath;
+        this.intentCustomOutputPath = sutrConfig.intentCustomOutputPath;
+        this.utterancesCustomOutputPath = sutrConfig.utterancesCustomOutputPath;
+        this.customTypesCustomOutputPath = sutrConfig.customTypesCustomOutputPath;
     }
+
+    @PropertyName(value="sutr.handlerCustomOutputPath")
+    public String handlerCustomOutputPath;
+
+    @PropertyName(value="sutr.intentCustomOutputPath")
+    public String intentCustomOutputPath;
+
+    @PropertyName(value="sutr.utterancesCustomOutputPath")
+    public String utterancesCustomOutputPath;
+
+    @PropertyName(value="sutr.customTypesCustomOutputPath")
+    public String customTypesCustomOutputPath;
 
     @PropertyName(value="sutr.useCustomPaths", defaultValue = "false")
     public boolean useCustomPaths;
