@@ -11,6 +11,21 @@ import java.util.List;
  */
 public class SutrConfig {
 
+    public SutrConfig() {
+    }
+
+    public SutrConfig(SutrConfig sutrConfig) {
+
+        this.useCustomPaths = sutrConfig.useCustomPaths;
+        this.templatePaths = sutrConfig.templatePaths;
+        this.handlerTemplatePath = sutrConfig.handlerTemplatePath;
+        this.handlerOutputPath = sutrConfig.handlerOutputPath;
+        this.intentOutputPath = sutrConfig.intentOutputPath;
+        this.utterancesOutputPath = sutrConfig.utterancesOutputPath;
+        this.customTypesOutputPath = sutrConfig.customTypesOutputPath;
+        this.selectedHandlerTemplate = sutrConfig.selectedHandlerTemplate;
+    }
+
     @PropertyName(value="sutr.useCustomPaths", defaultValue = "false")
     public boolean useCustomPaths;
 

@@ -64,9 +64,7 @@ public class SutrConfigPanel implements Configurable {
             EnableCustomPaths(useCustomOutputPathsCheckBox.isSelected());
         });
 
-
         useCustomOutputPathsCheckBox.setSelected(configProvider.useCustomPaths());
-//        handlerTemplateComboBox.setSelectedItem(configProvider.getCurrentHandlerTemplatePath());
 
         useCustomOutputPathsCheckBox.addActionListener(e -> {
             boolean isSelected = ((JCheckBox) e.getSource()).isSelected();
@@ -84,7 +82,10 @@ public class SutrConfigPanel implements Configurable {
 
     private void SetupValues(SutrConfigProvider configProvider) {
         for (String path : configProvider.getHandlerTemplateLocations()) {
-
+            this.handlerTemplateComboBox.getComboBox().addItem(path);
+            if(configProvider.getCurrentHandlerTemplatePath().equals(path)){
+                this.handlerTemplateComboBox.getComboBox().setSelectedItem(path);
+            }
         }
 
         EnableCustomPaths(useCustomOutputPathsCheckBox.isSelected());
@@ -129,6 +130,7 @@ public class SutrConfigPanel implements Configurable {
 
 
         configProvider.useCustomPaths(isEnabled);
+
         handlerOutputLocationBrowseButton.setText(configProvider.getHandlerOutputLocation());
         intentOutputLocationBrowseButton.setText(configProvider.getIntentOutputLocation());
         utterancesOutputLocationBrowseButton.setText(configProvider.getUtterancesOutputLocation());
@@ -156,30 +158,7 @@ public class SutrConfigPanel implements Configurable {
     @Override
     public void apply() throws ConfigurationException {
 
-        String _handlerOutputLocation = handlerOutputLocationBrowseButton.getText();
-        String _utterancesOutputLocation = utterancesOutputLocationBrowseButton.getText();
-        String _customTypesOutputLocation = customTypesOutputLocationBrowseButton.getText();
-        String _intentOutputLocation = intentOutputLocationBrowseButton.getText();
-        String _handlerLanguage = (String) handlerTemplateComboBox.getComboBox().getSelectedItem();
-        Boolean _useDefaultPaths = useCustomOutputPathsCheckBox.isSelected();
-
-        boolean configHasChanged = !_handlerOutputLocation.equals(configProvider.getHandlerOutputLocation())
-//                || !_handlerTemplateLocation.equals(configProvider.handlerTemplateLocation)
-                || !_intentOutputLocation.equals(configProvider.getIntentOutputLocation())
-                || !_utterancesOutputLocation.equals(configProvider.getUtterancesOutputLocation())
-                || !_customTypesOutputLocation.equals(configProvider.getCustomTypesOutputLocation())
-                || !_handlerLanguage.equals(configProvider.getCurrentHandlerTemplatePath())
-                || _useDefaultPaths != configProvider.useCustomPaths();
-
-        if (configHasChanged) {
-
-//            configProvider.handlerTemplateLocation = _handlerTemplateLocation;
-            configProvider.setHandlerOutputLocation(_handlerOutputLocation);
-            configProvider.setUtterancesOutputLocation(_utterancesOutputLocation);
-            configProvider.setCustomTypesOutputLocation(_customTypesOutputLocation);
-            configProvider.setIntentOutputLocation(_intentOutputLocation);
-            configProvider.setCurrentHandlerTemplatePath( _handlerLanguage);
-            configProvider.useCustomPaths(_useDefaultPaths);
+        if (configProvider.hasChanged()) {
 
             configProvider.apply();
         }

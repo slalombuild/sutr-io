@@ -3,6 +3,7 @@ package com.slalom.aws.avs.sutr.conf;
 import com.intellij.ide.util.PropertiesComponent;
 import com.intellij.openapi.project.Project;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,13 +24,18 @@ public class SutrConfigProvider {
 
     private Project _project;
     private SutrConfig config;
+    private SutrConfig _configCopy;
 
     public void loadProperties(Project project) {
         assert project != null;
 
         _project = project;
 
-        reset();
+        config = new SutrConfig();
+
+        PropertiesComponent comp = PropertiesComponent.getInstance(_project);
+        comp.loadFields(config);
+        _configCopy = new SutrConfig(config);
     }
 
     public void apply() {
@@ -41,19 +47,11 @@ public class SutrConfigProvider {
     }
 
     public void reset(){
-        config = new SutrConfig();
-
-        PropertiesComponent comp = PropertiesComponent.getInstance(_project);
-
-        comp.loadFields(config);
+        config = new SutrConfig(_configCopy);
     }
 
     public void useCustomPaths(boolean useCustomPaths) {
         config.useCustomPaths = useCustomPaths;
-        SetOutputPaths(useCustomPaths);
-    }
-
-    private void SetOutputPaths(boolean useCustomPaths) {
     }
 
     public boolean useCustomPaths() {
@@ -74,9 +72,10 @@ public class SutrConfigProvider {
     }
 
     public String getCurrentHandlerTemplatePath() {
-        if(config.selectedHandlerTemplate == null){
+        if(config.selectedHandlerTemplate == null || config.selectedHandlerTemplate.equals("null")){
             config.selectedHandlerTemplate = DEFAULT_PYTHON_TEMPLATE_PATH;
         }
+
         return config.selectedHandlerTemplate;
     }
 
@@ -85,15 +84,19 @@ public class SutrConfigProvider {
     }
 
     public String getHandlerOutputLocation() {
-        if(config.useCustomPaths){
-            String selectedTemplate = "";
-            String filename = "";
+        if(!config.useCustomPaths){
+            String selectedTemplate = config.selectedHandlerTemplate;
+
+            String filename;
 
             if(selectedTemplate.equals(DEFAULT_PYTHON_TEMPLATE_PATH)){
                 filename = "ask_handler.py";
             }
             else if(selectedTemplate.equals(DEFAULT_JAVASCRIPT_TEMPLATE_PATH)){
                 filename = "askHandler.js";
+            }
+            else{
+                filename = new File(config.selectedHandlerTemplate).getName();
             }
 
             return FormatProjectPath(DEFAULT_HANDLER_OUTPUT_PATH + filename);
@@ -135,5 +138,20 @@ public class SutrConfigProvider {
 
     public void setCustomTypesOutputLocation(String customTypesOutputLocation) {
         config.customTypesOutputPath = customTypesOutputLocation;
+    }
+
+    public boolean hasChanged() {
+
+        boolean configHasChanged =
+         config.useCustomPaths != _configCopy.useCustomPaths
+//        || !config.templatePaths = _configCopy.templatePaths
+        || !config.handlerTemplatePath.equals(_configCopy.handlerTemplatePath)
+        || !config.handlerOutputPath.equals(_configCopy.handlerOutputPath)
+        || !config.intentOutputPath.equals(_configCopy.intentOutputPath)
+        || !config.utterancesOutputPath.equals(_configCopy.utterancesOutputPath)
+        || !config.customTypesOutputPath.equals(_configCopy.customTypesOutputPath)
+        || !config.selectedHandlerTemplate.equals(_configCopy.selectedHandlerTemplate);
+
+        return configHasChanged;
     }
 }
