@@ -34,14 +34,17 @@ public class GenerateVoiceModel extends SutrAction {
             final StringBuilder buildIntent = SutrGenerator.buildIntent(sutrFiles);
             final StringBuilder buildUtterances = SutrGenerator.buildUtterances(sutrFiles);
             final StringBuilder buildHandler = SutrGenerator.buildHandler(sutrFiles, sutrConfigProvider.getCurrentHandlerTemplatePath());
+            final StringBuilder buildCustomTypes = SutrGenerator.buildSutrCustomTypes(sutrFiles);
 
             String handlerPath = sutrConfigProvider.getHandlerOutputLocation();
             String intentPath = sutrConfigProvider.getIntentOutputLocation();
             String utterancesPath = sutrConfigProvider.getUtterancesOutputLocation();
+            String customTypesPath = sutrConfigProvider.getCustomTypesOutputLocation();
 
             WriteContentToFile(buildHandler, handlerPath);
             WriteContentToFile(buildIntent, intentPath);
             WriteContentToFile(buildUtterances, utterancesPath);
+            WriteContentToFile(buildCustomTypes, customTypesPath);
 
             ActionUtil.ShowInfoMessage("ASK model generated.", e);
 

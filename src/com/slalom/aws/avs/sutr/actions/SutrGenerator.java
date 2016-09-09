@@ -39,6 +39,33 @@ public class SutrGenerator {
         return new StringBuilder(gson.toJson(intents));
     }
 
+    static StringBuilder buildSutrCustomTypes(List<SutrFile> sutrFiles) throws SutrGeneratorException {
+
+        BuildSutrDefinitions sutrDefinitions = new BuildSutrDefinitions(sutrFiles).invoke();
+
+        if (sutrDefinitions.getSutrObjectList().isEmpty()) {
+            throw new SutrGeneratorException("No Sutr definitions found");
+        }
+
+        StringBuilder output = new StringBuilder();
+        for (Map.Entry<String, SutrCustomType> sutrCustomType : sutrDefinitions.getSutrCustomTypeKeys().entrySet()) {
+            output.append(sutrCustomType.getKey()).append("\n");
+            output.append(buildCustomTypeItems(sutrCustomType.getValue()));
+            output.append("<<<<<\n");
+        }
+
+        for (Map.Entry<String, SutrLiteralType> sutrLiteralType : sutrDefinitions.getSutrLiteralTypeKeys().entrySet()) {
+            output.append(sutrLiteralType.getKey()).append("\n");
+            for (final SutrLiteralPhrase sutrLiteralPhrase : sutrLiteralType.getValue().getLiteralPhrases().getLiteralPhraseList()) {
+                output.append(sutrLiteralPhrase.getText()).append("\n");
+            }
+
+            output.append("<<<<<\n");
+        }
+
+        return output;
+    }
+
     public static List<SutrIntentModel> GetModels(BuildSutrDefinitions sutrDefinitions) throws SutrGeneratorException {
         List<SutrIntentModel> sutrIntentModelCollection = new ArrayList<>();
 
@@ -282,9 +309,9 @@ public class SutrGenerator {
 
 //            String handlerTemplateLocation = config.handlerTemplateLocation;
 
-//            String template = config.getCurrentHandlerTemplatePath();
+        String template = config.getCurrentHandlerTemplatePath();
 
-        String template =  "C:\\Users\\stryderc\\dev\\sources\\sutr-io\\src\\resources\\templates\\python.mustache";
+        //String template =  "C:\\Users\\stryderc\\dev\\sources\\sutr-io\\src\\resources\\templates\\python.mustache";
 
         SutrMustacheModelBuilder modelBuilder = new SutrMustacheModelBuilder(template);
         try {
