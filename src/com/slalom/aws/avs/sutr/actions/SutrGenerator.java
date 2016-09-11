@@ -307,11 +307,11 @@ public class SutrGenerator {
     static StringBuilder buildHandler(List<SutrFile> sutrFiles, String language) throws SutrGeneratorException {
         SutrConfigProvider config = SutrPluginUtil.getConfigProvider();
 
-//            String handlerTemplateLocation = config.handlerTemplateLocation;
-
         String template = config.getCurrentHandlerTemplatePath();
-
-        //String template =  "C:\\Users\\stryderc\\dev\\sources\\sutr-io\\src\\resources\\templates\\python.mustache";
+        String defaultTemplate = getDefaultTemplatePath(template);
+        if (defaultTemplate != null) {
+            template = defaultTemplate;
+        }
 
         SutrMustacheModelBuilder modelBuilder = new SutrMustacheModelBuilder(template);
         try {
@@ -322,6 +322,20 @@ public class SutrGenerator {
         }
 
         return new StringBuilder();
+    }
+
+    private static String getDefaultTemplatePath(String template) {
+        String defaultTemplateLocation = null;
+        if (Objects.equals(template, SutrConfigProvider.DEFAULT_JAVASCRIPT_TEMPLATE_PATH)) {
+            ClassLoader classLoader = SutrGenerator.class.getClassLoader();
+            defaultTemplateLocation = classLoader.getResource("templates/javascript.mustache").getFile();
+        }
+        else if (Objects.equals(template, SutrConfigProvider.DEFAULT_PYTHON_TEMPLATE_PATH)) {
+            ClassLoader classLoader = SutrGenerator.class.getClassLoader();
+            defaultTemplateLocation = classLoader.getResource("templates/python.mustache").getFile();
+        }
+
+        return defaultTemplateLocation;
     }
 
     public static class BuildSutrDefinitions {
