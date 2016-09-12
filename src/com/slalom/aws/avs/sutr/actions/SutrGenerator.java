@@ -80,9 +80,12 @@ public class SutrGenerator {
         for (Map.Entry<String, SutrLiteralType> sutrLiteralType : sutrDefinitions.getSutrLiteralTypeKeys().entrySet()) {
             output.append(sutrLiteralType.getKey()).append("\n");
             for (final SutrLiteralPhrase sutrLiteralPhrase : sutrLiteralType.getValue().getLiteralPhrases().getLiteralPhraseList()) {
-                output.append(sutrLiteralPhrase.getText()).append("\n");
-            }
+                String literalPhrases = sutrLiteralPhrase.getText()
+                    // trim whitespace characters before and after each item phrase
+                    .replaceAll("(?:\\s*(.+)\\s*\\n?)", "$1\n");
 
+                output.append(literalPhrases);
+            }
             output.append("<<<<<\n");
         }
 
@@ -353,7 +356,11 @@ public class SutrGenerator {
         }
 
         for (final SutrCustomTypeItem sutrCustomTypeItem : customTypeItemList) {
-            customTypeItemListBuilder.append(sutrCustomTypeItem.getText()).append("\n");
+            String customTypeItemText = sutrCustomTypeItem.getText()
+                // trim whitespace characters before and after each item phrase
+                .replaceAll("(?:\\s*(.+)\\s*\\n?)", "$1\n");
+
+            customTypeItemListBuilder.append(customTypeItemText);
         }
 
         return customTypeItemListBuilder;
