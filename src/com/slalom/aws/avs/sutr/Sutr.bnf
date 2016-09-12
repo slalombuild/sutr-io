@@ -45,7 +45,7 @@ private top_level_recover ::= !('def' | 'slotType' | 'literal' | 'from')
 import_stmt ::= 'from' file_name IMPORT type_name
 {methods=[getTypeReferences resolveReference]}
 
-file_name ::= NAME
+file_name ::= ('../'|'./')*NAME('/'NAME)*
 
 custom_type ::= 'slotType' type_name custom_type_items
 {extends="com.slalom.aws.avs.sutr.psi.impl.SutrReferenceImpl" implements="com.slalom.aws.avs.sutr.psi.SutrTypeDefinitionReference" }
