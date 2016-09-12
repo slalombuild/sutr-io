@@ -27,7 +27,6 @@
   <depends>com.intellij.modules.lang</depends>
   <!--<depends>com.github.spullara.mustache.java</depends>-->
 
-
   <extensions defaultExtensionNs="com.intellij">
     <applicationConfigurable instance="com.slalom.aws.avs.sutr.conf.SutrConfigPanel"/>
     <fileTypeFactory implementation="com.slalom.aws.avs.sutr.SutrFileTypeFactory" />
@@ -41,6 +40,7 @@
     <lang.findUsagesProvider language="sutr" implementationClass="com.slalom.aws.avs.sutr.SutrFindUsagesProvider" />
     <completion.contributor language="sutr" implementationClass="com.slalom.aws.avs.sutr.SutrCompletionContributor" />
     <lang.commenter language="sutr" implementationClass="com.slalom.aws.avs.sutr.psi.impl.SutrCommenter" />
+    <configurationType implementation="com.slalom.aws.avs.sutr.conf.SutrRunConfigType"/>
     <!--<colorSettingsPage implementation="com.slalom.aws.avs.sutr.SutrColorSettingsPage" />-->
     <!--<colorSettingsPage implementation="com.slalom.aws.avs.utr.UtrColorSettingsPage" />-->
   </extensions>

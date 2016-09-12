@@ -15,12 +15,35 @@ import com.slalom.aws.avs.sutr.psi.*;
 import com.slalom.aws.avs.sutr.psi.impl.SutrLiteralTypeImpl;
 import org.jetbrains.annotations.NotNull;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.nio.file.Paths;
 import java.util.*;
 
 /**
  * Created by stryderc on 1/8/2016.
  */
 public class SutrGenerator {
+
+    public static void genererateAsk(List<SutrFile> sutrFiles) throws SutrGeneratorException {
+        SutrConfigProvider sutrConfigProvider = SutrPluginUtil.getConfigProvider();
+
+        final StringBuilder buildIntent = buildIntent(sutrFiles);
+        final StringBuilder buildUtterances = buildUtterances(sutrFiles);
+        final StringBuilder buildHandler = buildHandler(sutrFiles, sutrConfigProvider.getCurrentHandlerTemplatePath());
+        final StringBuilder buildCustomTypes = buildSutrCustomTypes(sutrFiles);
+
+        String handlerPath = sutrConfigProvider.getHandlerOutputLocation();
+        String intentPath = sutrConfigProvider.getIntentOutputLocation();
+        String utterancesPath = sutrConfigProvider.getUtterancesOutputLocation();
+        String customTypesPath = sutrConfigProvider.getCustomTypesOutputLocation();
+
+        WriteContentToFile(buildHandler, handlerPath);
+        WriteContentToFile(buildIntent, intentPath);
+        WriteContentToFile(buildUtterances, utterancesPath);
+        WriteContentToFile(buildCustomTypes, customTypesPath);
+    }
 
     static StringBuilder buildIntent(List<SutrFile> sutrFiles) throws SutrGeneratorException {
         Intents intents = new Intents();
@@ -150,6 +173,38 @@ public class SutrGenerator {
             builder.append(utterance.name).append(" ").append(utterance.body).append("\n");
         }
         return builder;
+    }
+
+    private static void WriteContentToFile(StringBuilder fileContent, String filePath) throws SutrGeneratorException {
+
+        File file = new File(filePath);
+
+        try {
+            File dir = Paths.get(filePath).getParent().toFile();
+
+            boolean dirExists = dir.isDirectory();
+            if(!dirExists){
+                dirExists =  dir.mkdirs();
+            }
+
+            if(!dirExists){
+                throw new SutrGeneratorException("Unable to create directory [" + dir.toString() + "]");
+            }
+
+            if((file.exists()|| file.createNewFile())){
+                FileWriter writer = new FileWriter(file);
+                writer.write(fileContent.toString());
+                writer.close();
+            }
+            else{
+                throw new SutrGeneratorException("Unable to create file [" + file.toPath().toString() + "]");
+            }
+
+
+        } catch (IOException e1) {
+            e1.printStackTrace();
+        }
+
     }
 
     private static Map<String, List<String>> getLiterals(final SutrFile sutrFile) {
