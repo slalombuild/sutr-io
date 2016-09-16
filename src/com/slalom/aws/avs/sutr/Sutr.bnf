@@ -50,13 +50,13 @@ file_name ::= ('../'|'./')*NAME('/'NAME)*
 custom_type ::= 'slotType' type_name custom_type_items
 {extends="com.slalom.aws.avs.sutr.psi.impl.SutrReferenceImpl" implements="com.slalom.aws.avs.sutr.psi.SutrTypeDefinitionReference" }
 
-custom_type_items ::= LS custom_type_item (EOL custom_type_item)* RS {pin=1}
+custom_type_items ::= LS custom_type_item ("," custom_type_item)* RS {pin=1}
 custom_type_item ::= (NAME|WORD)*
 
 literal_type ::= 'literal' type_name literal_phrases
 {extends="com.slalom.aws.avs.sutr.psi.impl.SutrReferenceImpl" implements="com.slalom.aws.avs.sutr.psi.SutrTypeDefinitionReference" }
 
-literal_phrases ::= LS literal_phrase (EOL literal_phrase )* RS {pin=1}
+literal_phrases ::= LS literal_phrase ("," literal_phrase )* RS {pin=1}
 literal_phrase ::= (NAME|WORD)*
 
 object ::= 'def' sutr_name sutr_params body function_pointer {pin=3}
