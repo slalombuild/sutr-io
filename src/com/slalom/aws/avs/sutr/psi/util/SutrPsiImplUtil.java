@@ -1,11 +1,17 @@
 package com.slalom.aws.avs.sutr.psi.util;
 
 import com.intellij.lang.ASTNode;
+import com.intellij.openapi.vfs.LocalFileSystem;
+import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiDirectory;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
+import com.intellij.psi.PsiManager;
 import com.slalom.aws.avs.sutr.SutrLanguageType;
 import com.slalom.aws.avs.sutr.psi.*;
+
+import java.io.IOException;
+import java.nio.file.Paths;
 
 /**
  * Created by Stryder on 1/17/2016.
@@ -42,7 +48,22 @@ public class SutrPsiImplUtil {
         final PsiDirectory containingDirectory = importStmt.getContainingFile().getContainingDirectory();
 
         if (containingDirectory != null) {
-            PsiFile importFile = containingDirectory.findFile(fileName);
+            PsiManager psiManager = PsiManager.getInstance(importStmt.getProject());
+            String absoluteFileName;
+            try {
+                absoluteFileName = Paths.get(containingDirectory.getVirtualFile().getPath(), fileName)
+                    .toRealPath()
+                    .toString();
+            } catch (IOException e) {
+                return null;
+            }
+
+            VirtualFile virtualImportFile = LocalFileSystem.getInstance().findFileByPath(absoluteFileName);
+            PsiFile importFile = null;
+            if (virtualImportFile != null) {
+                importFile = psiManager.findFile(virtualImportFile);
+            }
+
             if (importFile != null) {
                 for (SutrTypeDefinitionReference sutrTypeDefinitionReference : ((SutrFile) importFile).findChildrenByClass(SutrTypeDefinitionReference.class)) {
                     if(sutrTypeDefinitionReference.getTypeName().getText().equals(importStmt.getTypeName().getText())){

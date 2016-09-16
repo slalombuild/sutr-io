@@ -29,57 +29,11 @@ public class GenerateVoiceModel extends SutrAction {
         if (project == null || sutrFiles.isEmpty()) return;
 
         try {
-            SutrConfigProvider sutrConfigProvider = SutrPluginUtil.getConfigProvider();
-
-            final StringBuilder buildIntent = SutrGenerator.buildIntent(sutrFiles);
-            final StringBuilder buildUtterances = SutrGenerator.buildUtterances(sutrFiles);
-            final StringBuilder buildHandler = SutrGenerator.buildHandler(sutrFiles, sutrConfigProvider.getCurrentHandlerTemplatePath());
-
-            String handlerPath = sutrConfigProvider.getHandlerOutputLocation();
-            String intentPath = sutrConfigProvider.getIntentOutputLocation();
-            String utterancesPath = sutrConfigProvider.getUtterancesOutputLocation();
-
-            WriteContentToFile(buildHandler, handlerPath);
-            WriteContentToFile(buildIntent, intentPath);
-            WriteContentToFile(buildUtterances, utterancesPath);
-
+            SutrGenerator.genererateAsk(sutrFiles);
             ActionUtil.ShowInfoMessage("ASK model generated.", e);
 
         } catch (SutrGeneratorException e1) {
             ActionUtil.ShowErrorMessage(e1.getMessage(), e);
         }
     }
-
-    private void WriteContentToFile(StringBuilder fileContent, String filePath) throws SutrGeneratorException {
-
-        File file = new File(filePath);
-
-        try {
-            File dir = Paths.get(filePath).getParent().toFile();
-
-            boolean dirExists = dir.isDirectory();
-            if(!dirExists){
-               dirExists =  dir.mkdirs();
-            }
-
-            if(!dirExists){
-                throw new SutrGeneratorException("Unable to create directory [" + dir.toString() + "]");
-            }
-
-            if((file.exists()|| file.createNewFile())){
-                FileWriter writer = new FileWriter(file);
-                writer.write(fileContent.toString());
-                writer.close();
-            }
-            else{
-                throw new SutrGeneratorException("Unable to create file [" + file.toPath().toString() + "]");
-            }
-
-
-        } catch (IOException e1) {
-            e1.printStackTrace();
-        }
-
-    }
-
 }

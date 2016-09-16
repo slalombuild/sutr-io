@@ -1,7 +1,7 @@
 <idea-plugin version="2">
   <id>com.slalom.idea.aws.avs.sutr</id>
   <name>Sutr Language Plugin</name>
-  <version>0.7.4</version>
+  <version>0.7.6</version>
   <vendor email="stryderc@slalom.com" url="http://www.slalom.com">Slalom</vendor>
 
   <description><![CDATA[
@@ -9,8 +9,10 @@
     ]]></description>
 
   <change-notes><![CDATA[
-    0.7.4 - Settings panel added. Can now configure output paths.
-    0.7.3 - Support added for 'from <file> import <typeName>' statements. '_' now valid for Type name declarations.
+    0.7.6 - Support added for importing types with relative path.<br>
+    0.7.5 - Added run configuration to allow generation of Ask as part of a build.<br>
+    0.7.4 - Settings panel added. Can now configure output paths.<br>
+    0.7.3 - Support added for 'from <file> import <typeName>' statements. '_' now valid for Type name declarations.<br>
     0.7.2 - Implement error annotations for duplicate types. Pop up messages and compilation validation added.<br>
     0.7.1 - Add generator for Node/python. Copy Custom Type List action added.<br>
     0.7.0 - Implement error annotations for types, slots, and duplicates. Rename refactoring enabled. Commenter hot key enabled.<br>
@@ -27,7 +29,6 @@
   <depends>com.intellij.modules.lang</depends>
   <!--<depends>com.github.spullara.mustache.java</depends>-->
 
-
   <extensions defaultExtensionNs="com.intellij">
     <applicationConfigurable instance="com.slalom.aws.avs.sutr.conf.SutrConfigPanel"/>
     <fileTypeFactory implementation="com.slalom.aws.avs.sutr.SutrFileTypeFactory" />
@@ -41,6 +42,7 @@
     <lang.findUsagesProvider language="sutr" implementationClass="com.slalom.aws.avs.sutr.SutrFindUsagesProvider" />
     <completion.contributor language="sutr" implementationClass="com.slalom.aws.avs.sutr.SutrCompletionContributor" />
     <lang.commenter language="sutr" implementationClass="com.slalom.aws.avs.sutr.psi.impl.SutrCommenter" />
+    <configurationType implementation="com.slalom.aws.avs.sutr.conf.SutrRunConfigType"/>
     <!--<colorSettingsPage implementation="com.slalom.aws.avs.sutr.SutrColorSettingsPage" />-->
     <!--<colorSettingsPage implementation="com.slalom.aws.avs.utr.UtrColorSettingsPage" />-->
   </extensions>

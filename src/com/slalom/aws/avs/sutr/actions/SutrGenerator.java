@@ -15,12 +15,35 @@ import com.slalom.aws.avs.sutr.psi.*;
 import com.slalom.aws.avs.sutr.psi.impl.SutrLiteralTypeImpl;
 import org.jetbrains.annotations.NotNull;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.nio.file.Paths;
 import java.util.*;
 
 /**
  * Created by stryderc on 1/8/2016.
  */
 public class SutrGenerator {
+
+    public static void genererateAsk(List<SutrFile> sutrFiles) throws SutrGeneratorException {
+        SutrConfigProvider sutrConfigProvider = SutrPluginUtil.getConfigProvider();
+
+        final StringBuilder buildIntent = buildIntent(sutrFiles);
+        final StringBuilder buildUtterances = buildUtterances(sutrFiles);
+        final StringBuilder buildHandler = buildHandler(sutrFiles, sutrConfigProvider.getCurrentHandlerTemplatePath());
+        final StringBuilder buildCustomTypes = buildSutrCustomTypes(sutrFiles);
+
+        String handlerPath = sutrConfigProvider.getHandlerOutputLocation();
+        String intentPath = sutrConfigProvider.getIntentOutputLocation();
+        String utterancesPath = sutrConfigProvider.getUtterancesOutputLocation();
+        String customTypesPath = sutrConfigProvider.getCustomTypesOutputLocation();
+
+        WriteContentToFile(buildHandler, handlerPath);
+        WriteContentToFile(buildIntent, intentPath);
+        WriteContentToFile(buildUtterances, utterancesPath);
+        WriteContentToFile(buildCustomTypes, customTypesPath);
+    }
 
     static StringBuilder buildIntent(List<SutrFile> sutrFiles) throws SutrGeneratorException {
         Intents intents = new Intents();
@@ -37,6 +60,36 @@ public class SutrGenerator {
         intents.sutrIntentModels = sutrIntentModelCollection;
 
         return new StringBuilder(gson.toJson(intents));
+    }
+
+    static StringBuilder buildSutrCustomTypes(List<SutrFile> sutrFiles) throws SutrGeneratorException {
+
+        BuildSutrDefinitions sutrDefinitions = new BuildSutrDefinitions(sutrFiles).invoke();
+
+        if (sutrDefinitions.getSutrObjectList().isEmpty()) {
+            throw new SutrGeneratorException("No Sutr definitions found");
+        }
+
+        StringBuilder output = new StringBuilder();
+        for (Map.Entry<String, SutrCustomType> sutrCustomType : sutrDefinitions.getSutrCustomTypeKeys().entrySet()) {
+            output.append(sutrCustomType.getKey()).append("\n");
+            output.append(buildCustomTypeItems(sutrCustomType.getValue()));
+            output.append("<<<<<\n");
+        }
+
+        for (Map.Entry<String, SutrLiteralType> sutrLiteralType : sutrDefinitions.getSutrLiteralTypeKeys().entrySet()) {
+            output.append(sutrLiteralType.getKey()).append("\n");
+            for (final SutrLiteralPhrase sutrLiteralPhrase : sutrLiteralType.getValue().getLiteralPhrases().getLiteralPhraseList()) {
+                String literalPhrases = sutrLiteralPhrase.getText()
+                    // trim whitespace characters before and after each item phrase
+                    .replaceAll("(?:\\s*(.+)\\s*\\n?)", "$1\n");
+
+                output.append(literalPhrases);
+            }
+            output.append("<<<<<\n");
+        }
+
+        return output;
     }
 
     public static List<SutrIntentModel> GetModels(BuildSutrDefinitions sutrDefinitions) throws SutrGeneratorException {
@@ -123,6 +176,38 @@ public class SutrGenerator {
             builder.append(utterance.name).append(" ").append(utterance.body).append("\n");
         }
         return builder;
+    }
+
+    private static void WriteContentToFile(StringBuilder fileContent, String filePath) throws SutrGeneratorException {
+
+        File file = new File(filePath);
+
+        try {
+            File dir = Paths.get(filePath).getParent().toFile();
+
+            boolean dirExists = dir.isDirectory();
+            if(!dirExists){
+                dirExists =  dir.mkdirs();
+            }
+
+            if(!dirExists){
+                throw new SutrGeneratorException("Unable to create directory [" + dir.toString() + "]");
+            }
+
+            if((file.exists()|| file.createNewFile())){
+                FileWriter writer = new FileWriter(file);
+                writer.write(fileContent.toString());
+                writer.close();
+            }
+            else{
+                throw new SutrGeneratorException("Unable to create file [" + file.toPath().toString() + "]");
+            }
+
+
+        } catch (IOException e1) {
+            e1.printStackTrace();
+        }
+
     }
 
     private static Map<String, List<String>> getLiterals(final SutrFile sutrFile) {
@@ -271,7 +356,11 @@ public class SutrGenerator {
         }
 
         for (final SutrCustomTypeItem sutrCustomTypeItem : customTypeItemList) {
-            customTypeItemListBuilder.append(sutrCustomTypeItem.getText()).append("\n");
+            String customTypeItemText = sutrCustomTypeItem.getText()
+                // trim whitespace characters before and after each item phrase
+                .replaceAll("(?:\\s*(.+)\\s*\\n?)", "$1\n");
+
+            customTypeItemListBuilder.append(customTypeItemText);
         }
 
         return customTypeItemListBuilder;
@@ -280,11 +369,11 @@ public class SutrGenerator {
     static StringBuilder buildHandler(List<SutrFile> sutrFiles, String language) throws SutrGeneratorException {
         SutrConfigProvider config = SutrPluginUtil.getConfigProvider();
 
-//            String handlerTemplateLocation = config.handlerTemplateLocation;
-
-//            String template = config.getCurrentHandlerTemplatePath();
-
-        String template =  "C:\\Users\\stryderc\\dev\\sources\\sutr-io\\src\\resources\\templates\\python.mustache";
+        String template = config.getCurrentHandlerTemplatePath();
+        String defaultTemplate = getDefaultTemplatePath(template);
+        if (defaultTemplate != null) {
+            template = defaultTemplate;
+        }
 
         SutrMustacheModelBuilder modelBuilder = new SutrMustacheModelBuilder(template);
         try {
@@ -295,6 +384,20 @@ public class SutrGenerator {
         }
 
         return new StringBuilder();
+    }
+
+    private static String getDefaultTemplatePath(String template) {
+        String defaultTemplateLocation = null;
+        if (Objects.equals(template, SutrConfigProvider.DEFAULT_JAVASCRIPT_TEMPLATE_PATH)) {
+            ClassLoader classLoader = SutrGenerator.class.getClassLoader();
+            defaultTemplateLocation = classLoader.getResource("templates/javascript.mustache").getFile();
+        }
+        else if (Objects.equals(template, SutrConfigProvider.DEFAULT_PYTHON_TEMPLATE_PATH)) {
+            ClassLoader classLoader = SutrGenerator.class.getClassLoader();
+            defaultTemplateLocation = classLoader.getResource("templates/python.mustache").getFile();
+        }
+
+        return defaultTemplateLocation;
     }
 
     public static class BuildSutrDefinitions {

@@ -16,9 +16,9 @@ public class SutrConfigProvider {
 
     public static final String PROJECT_ROOT_TOKEN = "$PROJECT_ROOT$";
     public static final String DEFAULT_HANDLER_OUTPUT_PATH = PROJECT_ROOT_TOKEN + "/ask/";
-    private static final String DEFAULT_INTENT_OUTPUT_PATH = "$PROJECT_ROOT$/ask/intentName.json";
-    private static final String DEFAULT_UTTERANCE_OUTPUT_PATH = "$PROJECT_ROOT$/ask/skill.utr";
-    private static final String DEFAULT_CUSTOM_TYPES_OUTPUT_PATH = "$PROJECT_ROOT$/ask/custom.types";
+    private static final String DEFAULT_INTENT_OUTPUT_PATH = "$PROJECT_ROOT$/out/ask/intentName.json";
+    private static final String DEFAULT_UTTERANCE_OUTPUT_PATH = "$PROJECT_ROOT$/out/ask/skill.utr";
+    private static final String DEFAULT_CUSTOM_TYPES_OUTPUT_PATH = "$PROJECT_ROOT$/out/ask/custom.types";
     public static final String DEFAULT_PYTHON_TEMPLATE_PATH = "<Default Python>";
     public static final String DEFAULT_JAVASCRIPT_TEMPLATE_PATH = "<Default Javascript>";
 
