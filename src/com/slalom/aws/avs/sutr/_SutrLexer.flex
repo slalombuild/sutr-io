@@ -23,7 +23,7 @@ LINE_WS=[\ \t\f]
 WHITE_SPACE=({LINE_WS}|{EOL})+
 
 COMMENT=#[^\r\n]*
-PHRASE=[a-zA-Z0-9 ]+
+PHRASE=[a-zA-Z0-9' ]+
 WORD=[a-zA-Z']+
 NAME=[a-zA-Z]+
 IDENTIFIER=[a-zA-Z_]+
