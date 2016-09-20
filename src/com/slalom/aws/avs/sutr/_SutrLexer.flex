@@ -73,6 +73,7 @@ FUNCTION_IDENTIFIER=[a-zA-Z_\.]+
 <YYSUTR_PHRASES> {
   {WHITE_SPACE} { return com.intellij.psi.TokenType.WHITE_SPACE; }
   "]" { yybegin(YYINITIAL); return SutrRS; }
+  {COMMENT} { return SutrCOMMENT; }
   {PHRASE} { return SutrPHRASE; }
 }
 
