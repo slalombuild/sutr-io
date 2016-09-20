@@ -22,6 +22,7 @@ public class _SutrLexer implements FlexLexer {
   /** lexical states */
   public static final int YYINITIAL = 0;
   public static final int YYSUTR = 2;
+  public static final int YYSUTR_PHRASES = 4;
 
   /**
    * ZZ_LEXSTATE[l] is the state in the DFA for the lexical state l
@@ -30,7 +31,7 @@ public class _SutrLexer implements FlexLexer {
    * l is of the form l = 2*k, k a non negative integer
    */
   private static final int ZZ_LEXSTATE[] = { 
-     0,  0,  1, 1
+     0,  0,  1,  1,  2, 2
   };
 
   /** 
@@ -52,10 +53,10 @@ public class _SutrLexer implements FlexLexer {
 
   /* The ZZ_CMAP_A table has 256 entries */
   static final char ZZ_CMAP_A[] = zzUnpackCMap(
-    "\11\0\1\3\1\2\1\0\1\3\1\1\22\0\1\3\2\0\1\4\3\0\1\5\1\27\1\30\2\0\1\33\1\0"+
-    "\1\10\16\0\1\34\1\35\2\0\32\6\1\31\1\0\1\32\1\0\1\7\1\0\1\20\2\6\1\11\1\12"+
-    "\1\13\2\6\1\15\2\6\1\14\1\24\1\6\1\23\1\22\1\6\1\17\1\6\1\16\4\6\1\21\1\6"+
-    "\1\25\1\0\1\26\202\0");
+    "\11\0\1\3\1\2\1\0\1\3\1\1\22\0\1\6\2\0\1\4\3\0\1\7\1\31\1\32\2\0\1\35\1\0"+
+    "\1\12\1\0\12\5\3\0\1\36\1\37\2\0\32\10\1\33\1\0\1\34\1\0\1\11\1\0\1\22\2\10"+
+    "\1\13\1\14\1\15\2\10\1\17\2\10\1\16\1\26\1\10\1\25\1\24\1\10\1\21\1\10\1\20"+
+    "\4\10\1\23\1\10\1\27\1\0\1\30\202\0");
 
   /** 
    * Translates DFA states to action switch labels.
@@ -63,13 +64,13 @@ public class _SutrLexer implements FlexLexer {
   private static final int [] ZZ_ACTION = zzUnpackAction();
 
   private static final String ZZ_ACTION_PACKED_0 =
-    "\2\0\1\1\1\2\1\3\1\4\1\5\1\6\1\7"+
+    "\3\0\1\1\1\2\1\3\1\4\1\5\1\6\1\7"+
     "\5\5\1\10\1\11\1\12\1\13\1\14\1\15\1\16"+
-    "\2\17\1\2\1\1\5\5\1\20\1\21\4\5\1\22"+
-    "\2\5\1\23\3\5\1\24\1\25";
+    "\2\17\1\2\1\1\1\20\1\2\1\21\5\5\1\22"+
+    "\1\23\4\5\1\24\2\5\1\25\3\5\1\26\1\27";
 
   private static int [] zzUnpackAction() {
-    int [] result = new int[45];
+    int [] result = new int[49];
     int offset = 0;
     offset = zzUnpackAction(ZZ_ACTION_PACKED_0, offset, result);
     return result;
@@ -94,15 +95,16 @@ public class _SutrLexer implements FlexLexer {
   private static final int [] ZZ_ROWMAP = zzUnpackRowMap();
 
   private static final String ZZ_ROWMAP_PACKED_0 =
-    "\0\0\0\36\0\74\0\132\0\170\0\226\0\264\0\322"+
-    "\0\360\0\u010e\0\u012c\0\u014a\0\u0168\0\u0186\0\74\0\74"+
-    "\0\74\0\74\0\74\0\74\0\74\0\u01a4\0\74\0\74"+
-    "\0\u01c2\0\u01e0\0\u01fe\0\u021c\0\u023a\0\u0258\0\74\0\264"+
-    "\0\u0276\0\u0294\0\u02b2\0\u02d0\0\264\0\u02ee\0\u030c\0\264"+
-    "\0\u032a\0\u0348\0\u0366\0\264\0\264";
+    "\0\0\0\40\0\100\0\140\0\200\0\240\0\300\0\340"+
+    "\0\u0100\0\u0120\0\u0140\0\u0160\0\u0180\0\u01a0\0\u01c0\0\140"+
+    "\0\140\0\140\0\140\0\140\0\140\0\140\0\u01e0\0\140"+
+    "\0\140\0\u0200\0\u0220\0\u0240\0\140\0\u0260\0\u0280\0\u02a0"+
+    "\0\u02c0\0\u02e0\0\140\0\340\0\u0300\0\u0320\0\u0340\0\u0360"+
+    "\0\340\0\u0380\0\u03a0\0\340\0\u03c0\0\u03e0\0\u0400\0\340"+
+    "\0\340";
 
   private static int [] zzUnpackRowMap() {
-    int [] result = new int[45];
+    int [] result = new int[49];
     int offset = 0;
     offset = zzUnpackRowMap(ZZ_ROWMAP_PACKED_0, offset, result);
     return result;
@@ -125,37 +127,40 @@ public class _SutrLexer implements FlexLexer {
   private static final int [] ZZ_TRANS = zzUnpackTrans();
 
   private static final String ZZ_TRANS_PACKED_0 =
-    "\1\3\3\4\1\5\1\6\1\7\1\10\1\11\1\12"+
-    "\1\7\1\13\1\14\1\15\1\16\6\7\1\17\1\20"+
-    "\1\21\1\22\1\23\1\24\1\25\3\3\1\26\1\27"+
-    "\1\30\1\5\1\6\1\7\1\10\1\11\14\7\1\17"+
-    "\1\20\1\21\1\22\1\23\1\24\1\25\1\31\1\3"+
-    "\37\0\3\4\32\0\1\5\2\0\33\5\5\0\2\6"+
-    "\2\0\14\6\16\0\1\6\1\7\1\10\1\11\14\7"+
-    "\17\0\2\10\1\11\14\10\17\0\17\11\16\0\1\6"+
-    "\1\7\1\10\1\11\1\7\1\32\12\7\16\0\1\6"+
-    "\1\7\1\10\1\11\6\7\1\33\5\7\16\0\1\6"+
-    "\1\7\1\10\1\11\4\7\1\34\7\7\16\0\1\6"+
-    "\1\7\1\10\1\11\13\7\1\35\16\0\1\6\1\7"+
-    "\1\10\1\11\10\7\1\36\3\7\13\0\1\27\70\0"+
-    "\1\37\5\0\1\6\1\7\1\10\1\11\2\7\1\40"+
-    "\11\7\16\0\1\6\1\7\1\10\1\11\12\7\1\41"+
-    "\1\7\16\0\1\6\1\7\1\10\1\11\5\7\1\42"+
-    "\6\7\16\0\1\6\1\7\1\10\1\11\11\7\1\43"+
-    "\2\7\16\0\1\6\1\7\1\10\1\11\11\7\1\44"+
-    "\2\7\16\0\1\6\1\7\1\10\1\11\13\7\1\45"+
-    "\16\0\1\6\1\7\1\10\1\11\1\7\1\46\12\7"+
-    "\16\0\1\6\1\7\1\10\1\11\12\7\1\47\1\7"+
-    "\16\0\1\6\1\7\1\10\1\11\1\7\1\50\12\7"+
-    "\16\0\1\6\1\7\1\10\1\11\6\7\1\51\5\7"+
-    "\16\0\1\6\1\7\1\10\1\11\6\7\1\52\5\7"+
-    "\16\0\1\6\1\7\1\10\1\11\7\7\1\53\4\7"+
-    "\16\0\1\6\1\7\1\10\1\11\5\7\1\54\6\7"+
-    "\16\0\1\6\1\7\1\10\1\11\3\7\1\55\10\7"+
-    "\11\0";
+    "\1\4\3\5\1\6\1\4\1\5\1\7\1\10\1\11"+
+    "\1\12\1\13\1\10\1\14\1\15\1\16\1\17\6\10"+
+    "\1\20\1\21\1\22\1\23\1\24\1\25\1\26\3\4"+
+    "\1\27\1\30\1\31\1\6\1\4\1\31\1\7\1\10"+
+    "\1\11\1\12\14\10\1\20\1\21\1\22\1\23\1\24"+
+    "\1\25\1\26\1\32\2\4\3\5\1\6\1\33\1\34"+
+    "\2\33\2\4\14\33\5\4\1\35\3\4\41\0\3\5"+
+    "\2\0\1\5\31\0\1\6\2\0\35\6\7\0\2\7"+
+    "\2\0\14\7\20\0\1\7\1\10\1\11\1\12\14\10"+
+    "\21\0\2\11\1\12\14\11\21\0\17\12\20\0\1\7"+
+    "\1\10\1\11\1\12\1\10\1\36\12\10\20\0\1\7"+
+    "\1\10\1\11\1\12\6\10\1\37\5\10\20\0\1\7"+
+    "\1\10\1\11\1\12\4\10\1\40\7\10\20\0\1\7"+
+    "\1\10\1\11\1\12\13\10\1\41\20\0\1\7\1\10"+
+    "\1\11\1\12\10\10\1\42\3\10\13\0\1\30\74\0"+
+    "\1\43\5\0\4\33\2\0\14\33\12\0\3\5\1\0"+
+    "\1\33\1\34\2\33\2\0\14\33\20\0\1\7\1\10"+
+    "\1\11\1\12\2\10\1\44\11\10\20\0\1\7\1\10"+
+    "\1\11\1\12\12\10\1\45\1\10\20\0\1\7\1\10"+
+    "\1\11\1\12\5\10\1\46\6\10\20\0\1\7\1\10"+
+    "\1\11\1\12\11\10\1\47\2\10\20\0\1\7\1\10"+
+    "\1\11\1\12\11\10\1\50\2\10\20\0\1\7\1\10"+
+    "\1\11\1\12\13\10\1\51\20\0\1\7\1\10\1\11"+
+    "\1\12\1\10\1\52\12\10\20\0\1\7\1\10\1\11"+
+    "\1\12\12\10\1\53\1\10\20\0\1\7\1\10\1\11"+
+    "\1\12\1\10\1\54\12\10\20\0\1\7\1\10\1\11"+
+    "\1\12\6\10\1\55\5\10\20\0\1\7\1\10\1\11"+
+    "\1\12\6\10\1\56\5\10\20\0\1\7\1\10\1\11"+
+    "\1\12\7\10\1\57\4\10\20\0\1\7\1\10\1\11"+
+    "\1\12\5\10\1\60\6\10\20\0\1\7\1\10\1\11"+
+    "\1\12\3\10\1\61\10\10\11\0";
 
   private static int [] zzUnpackTrans() {
-    int [] result = new int[900];
+    int [] result = new int[1056];
     int offset = 0;
     offset = zzUnpackTrans(ZZ_TRANS_PACKED_0, offset, result);
     return result;
@@ -193,11 +198,11 @@ public class _SutrLexer implements FlexLexer {
   private static final int [] ZZ_ATTRIBUTE = zzUnpackAttribute();
 
   private static final String ZZ_ATTRIBUTE_PACKED_0 =
-    "\2\0\1\11\13\1\7\11\1\1\2\11\6\1\1\11"+
-    "\16\1";
+    "\3\0\1\11\13\1\7\11\1\1\2\11\3\1\1\11"+
+    "\5\1\1\11\16\1";
 
   private static int [] zzUnpackAttribute() {
-    int [] result = new int[45];
+    int [] result = new int[49];
     int offset = 0;
     offset = zzUnpackAttribute(ZZ_ATTRIBUTE_PACKED_0, offset, result);
     return result;
@@ -505,87 +510,95 @@ public class _SutrLexer implements FlexLexer {
           case 1: 
             { return com.intellij.psi.TokenType.BAD_CHARACTER;
             }
-          case 22: break;
+          case 24: break;
           case 2: 
             { return com.intellij.psi.TokenType.WHITE_SPACE;
             }
-          case 23: break;
+          case 25: break;
           case 3: 
             { return SutrCOMMENT;
             }
-          case 24: break;
+          case 26: break;
           case 4: 
             { return SutrWORD;
             }
-          case 25: break;
+          case 27: break;
           case 5: 
             { return SutrNAME;
             }
-          case 26: break;
+          case 28: break;
           case 6: 
             { return SutrIDENTIFIER;
             }
-          case 27: break;
+          case 29: break;
           case 7: 
             { return SutrFUNCTION_IDENTIFIER;
             }
-          case 28: break;
+          case 30: break;
           case 8: 
             { return SutrLB;
             }
-          case 29: break;
+          case 31: break;
           case 9: 
             { return SutrRB;
             }
-          case 30: break;
+          case 32: break;
           case 10: 
             { return SutrLP;
             }
-          case 31: break;
+          case 33: break;
           case 11: 
             { return SutrRP;
             }
-          case 32: break;
-          case 12: 
-            { return SutrLS;
-            }
-          case 33: break;
-          case 13: 
-            { return SutrRS;
-            }
           case 34: break;
+          case 12: 
+            { yybegin(YYSUTR_PHRASES); return SutrLS;
+            }
+          case 35: break;
+          case 13: 
+            { yybegin(YYSUTR); return SutrRS;
+            }
+          case 36: break;
           case 14: 
             { return SutrCOMMA;
             }
-          case 35: break;
+          case 37: break;
           case 15: 
             { return SutrEOL;
             }
-          case 36: break;
-          case 16: 
-            { yybegin(YYINITIAL); return SutrFP;
-            }
-          case 37: break;
-          case 17: 
-            { yybegin(YYSUTR); return SutrDEF;
-            }
           case 38: break;
-          case 18: 
-            { return SutrFROM;
+          case 16: 
+            { return SutrPHRASE;
             }
           case 39: break;
-          case 19: 
-            { return SutrTYPE;
+          case 17: 
+            { yybegin(YYINITIAL); return SutrRS;
             }
           case 40: break;
-          case 20: 
-            { return SutrIMPORT;
+          case 18: 
+            { yybegin(YYINITIAL); return SutrFP;
             }
           case 41: break;
-          case 21: 
-            { return SutrLITERAL;
+          case 19: 
+            { yybegin(YYSUTR); return SutrDEF;
             }
           case 42: break;
+          case 20: 
+            { return SutrFROM;
+            }
+          case 43: break;
+          case 21: 
+            { return SutrTYPE;
+            }
+          case 44: break;
+          case 22: 
+            { return SutrIMPORT;
+            }
+          case 45: break;
+          case 23: 
+            { return SutrLITERAL;
+            }
+          case 46: break;
           default:
             zzScanError(ZZ_NO_MATCH);
           }
